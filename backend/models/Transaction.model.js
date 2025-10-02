@@ -1,22 +1,17 @@
 import mongoose from "mongoose";
 
 const TransactionSchema = new mongoose.Schema({
-    userId: { 
+    senderWalletId:{
         type: mongoose.Schema.Types.ObjectId, 
-        ref: "User",   // tells Mongoose this field references the User model
+        ref: "Wallet",   // tells Mongoose this field references the Wallet model , users will pay to this walletid
         required: true 
     },
-    walletId:{
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: "Wallet",   // tells Mongoose this field references the Wallet model
-        required: true 
-    },
-    SenderEmail:String,
+    senderEmail:String,
     senderName:String,
-    Amount:Number,
+    amount:Number,
     currency:String,
     paymentName:String,
-    PaymentLink:String, //Link to the project the sender is paying for 
+    paymentLink:String, //Link to the project the sender is paying for 
 
 })
 

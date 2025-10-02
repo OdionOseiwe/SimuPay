@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
-const ProjectSchema = new mongoose.Schema({
-    userId: { 
+const paymentSchema = new mongoose.Schema({
+    creatorId: { 
         type: mongoose.Schema.Types.ObjectId, 
         ref: "User",   // tells Mongoose this field references the User model
         required: true 
@@ -11,11 +11,15 @@ const ProjectSchema = new mongoose.Schema({
         ref: "Wallet",   // tells Mongoose this field references the Wallet model , users will pay to this walletid
         required: true 
     },
-    projectName:{
+    paymentName:{
         type:String,
         required:true
     },
-    projectAmount:{
+    totalAmount:{
+        type:String,
+        required:true
+    },
+    minimumAmountForPayment:{
         type:String,
         required:true
     },
@@ -23,11 +27,11 @@ const ProjectSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    projectDescription:{
+    paymentDescription:{
         type:String,
         required:true
     },
-    projectLink:{
+    paymentLink:{
         type:String,
         required:true
     },
@@ -41,4 +45,4 @@ const ProjectSchema = new mongoose.Schema({
     }
 })
 
-export const Payment = mongoose.model('ProjectSchema', ProjectSchema);
+export const Payment = mongoose.model('paymentSchema', paymentSchema);

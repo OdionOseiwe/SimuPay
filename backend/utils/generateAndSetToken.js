@@ -9,12 +9,11 @@ export const generateTokenAndSetCookie = (res, userId) => {
         { expiresIn: "1d" }            // token lifetime
     );
 
-    res.cookie("userToken", token, {
+    res.cookie("user-token", token, {
         httpOnly: true,                 // protect from XSS
         secure: true,
         sameSite: "strict",             // protect from CSRF
         maxAge: 1 * 24 * 60 * 60 * 1000 // 1 days
     });
-
     return token;
 }

@@ -48,8 +48,6 @@ export const signup = async(req,res)=>{
             ...user._doc,
             password:undefined
         }})
-    
-
     }catch(error){
         res.status(400).json({sucess: false, msg:"error occured while signingup"})
         console.log("error occured", error);
@@ -84,7 +82,6 @@ export const verifyEmail = async(req, res)=>{
         res.status(400).json({sucess: false, msg:"error occured while verifing email"})
         console.log("error occured", error);        
     }
-   
 }
 
 export const login = async(req,res)=>{
@@ -123,11 +120,13 @@ export const resendVerificationCode = async(req,res) =>{
 
         if (user.isverified) {
             res.status(200).json({
-                success:true, msg:"user verified"
+                success:false, msg:"user verified"
             });   
         }
-        if (user.verificationTokenExpireAt < Date.now()) {
-            
+        if (user.verificationTokenExpireAt > Date.now()) {
+            res.status(200).json({
+                success:false, msg:"token not expired"
+            });
         }
 
         const randomToken = crypto.randomInt(10000, 99999);
