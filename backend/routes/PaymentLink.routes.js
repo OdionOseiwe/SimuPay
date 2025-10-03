@@ -10,11 +10,10 @@ router.get('/get-all-links', protect, getAllPaymentLinks)
 
 //test route
 
-router.get('/create-project',(req,res)=>{
+router.get('/testcreate-link',(req,res)=>{
     res.status(400).json({
         msg:"Project created"
     })
-    
 })
 
 export default router // connected to index.js

@@ -45,7 +45,7 @@ export const createTransaction = async(req, res)=>{
 
         res.status(200).json({success:true, msg:transaction})
     }catch (error) {
-        res.status(400).json({success:false, msg:"Error occured during payment"})
+        res.status(400).json({success:false, msg:"Error occured during payment"});
         console.log("error occured", error);
     }
 }
@@ -53,10 +53,27 @@ export const createTransaction = async(req, res)=>{
 export const getTransactionByUserId =async(req,res)=>{
     const userId = req.userId;
     try {
-        const txns = await Transaction.find({ userId }).select("paymentName amount senderName senderEmail");
-        
-
+        const txns = await Transaction.findById({ userId }).select("paymentName amount senderName senderEmail");
+        if(!txns){
+            res.status(404).json({success:false, msg:"No transactions found"})
+        }
+        res.status(200).json({success:true, txns});
     } catch (error) {
-        
+        res.status(400).json({success:false, msg:"Error occured while fetching transactions"})
+        console.log("error occured", error);
+    }
+}
+
+export const getTransactionPaymentLink = async(req,res) =>{
+    const {paymentLink} = req.body;
+    try {
+        const txns = await Transaction.findOne({ paymentLink }).select("paymentName amount senderName senderEmail");
+        if(!txns){
+            res.status(404).json({success:false, msg:"No transactions found"})
+        }
+        res.status(200).json({success:true, txns});
+    } catch (error) {
+        res.status(400).json({success:false, msg:"Error occured while fetching transactions"})
+        console.log("error occured", error);
     }
 }

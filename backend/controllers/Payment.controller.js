@@ -5,9 +5,9 @@ import crypto from 'crypto'
 dotenv.config()
 
 export const createPaymentLink = async(req,res)=>{
-        const {paymentName, paymentAmount, currency, paymentDescription} = req.body;
+        const {paymentName, totalAmount, minimumAmountForPayment,currency, paymentDescription} = req.body;
     try {
-        if(!paymentName || !paymentAmount || !currency || !paymentDescription){
+        if(!paymentName || !minimumAmountForPayment || !currency || !paymentDescription){
             return res.status(400).json({success:false, msg:"empty fields"})
         }
         //generate payment link
@@ -23,7 +23,8 @@ export const createPaymentLink = async(req,res)=>{
             creatorId: req.userId,
             walletId:WalletId,
             paymentName,
-            paymentAmount,
+            totalAmount,
+            minimumAmountForPayment,
             currency,
             paymentDescription,
             paymentLink: link

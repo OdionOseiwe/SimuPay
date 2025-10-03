@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
 export const protect = (req, res, next) => {
-  const token = req.cookies.token; // read JWT from cookie
+  const token = req.cookies["auth_token"]; // read JWT from cookie
 
   if (!token) {
     return res.status(401).json({ success: false, msg: "Not authorized" });

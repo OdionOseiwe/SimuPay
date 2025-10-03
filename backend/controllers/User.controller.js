@@ -60,7 +60,7 @@ export const verifyEmail = async(req, res)=>{
     try {
         const user = await User.findOne({
             verificationToken:code,
-            verificationTokenExpireAt:{gt:Date()}
+            verificationTokenExpireAt:{$gt:Date.now()}
         })
         if(!user){
             res.status(400).json({success:false, msg:"Token expired or invalid token"})
@@ -104,7 +104,7 @@ export const login = async(req,res)=>{
         generateTokenAndSetCookie(res, user._id);
 
         res.status(200).json({
-            success:true, msg:"sucessfully login"
+            success:true, msg:"sucessfully logedin"
         });
 
     } catch (error) {
@@ -117,7 +117,9 @@ export const resendVerificationCode = async(req,res) =>{
     const {email} = req.body;
     try {
         const user = await User.findOne({email});
-
+        if (!user) {
+            res.status(404).json({success:false, msg:"user not found"})
+        }
         if (user.isverified) {
             res.status(200).json({
                 success:false, msg:"user verified"
@@ -133,6 +135,11 @@ export const resendVerificationCode = async(req,res) =>{
         user.verificationToken=randomToken;
         user.verificationTokenExpireAt=Date.now() + 2 * 60 * 1000;
         user.save();
+        res.status(200).json({
+            success:true, msg:"verification code resent", code:randomToken
+        });
+        //resend email with token
+
     } catch (error) {
         res.status(400).json({sucess: false, msg:"error occured"})
         console.log("error occured", error);
@@ -141,7 +148,11 @@ export const resendVerificationCode = async(req,res) =>{
 
 export  const logout =(req,res)=>{
     try {
-        res.clearCookie("userToken");
+        res.clearCookie("auth_token", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict"
+        });
         res.status(200).json({
             success:true, msg:"user logouted"
         });
