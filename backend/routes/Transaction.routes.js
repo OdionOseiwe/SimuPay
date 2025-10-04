@@ -1,13 +1,22 @@
 import express from "express"
 const router = express.Router()
-import { createTransaction, getTransactionByUserId, getTransactionPaymentLink } from "../controllers/Transaction.Controller.js"
+import { payWithPaymentLink,getTransactions, getTransactionByUserId, getTransactionPaymentLink } from "../controllers/Transaction.Controller.js"
 import { protect } from "../middlewares/protect.js"
 
-// all routes here are prefixed with /api/transaction
+router.post('/pay/:paymentRef', protect, payWithPaymentLink);
 
-router.post('/create-transaction', protect, createTransaction);
-router.get('/get-transaction-byId', protect, getTransactionByUserId);
-router.get('/get-transaction-byPayment', protect, getTransactionPaymentLink);
+// only logged in users can access these get routes
+
+//get all transactions 
+router.get('/transactions', protect, getTransactions);
+
+//get transactions by user id -> loged in user
+router.get('/transactions/user', protect, getTransactionByUserId);
+
+//get transactions by payment link
+// payment link is sent as query param
+// example /api/transaction/transactions?paymentLink=abc123
+router.get('/transactions', protect, getTransactionPaymentLink);
 
 //test route
 

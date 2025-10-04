@@ -6,7 +6,12 @@ import dotenv from 'dotenv'
 import {generateTokenAndSetCookie} from '../utils/generateAndSetToken.js'
 dotenv.config()
 
-
+//user signup
+// create a wallet for the user when they sign up
+// send verification email with token
+// token expires in 2 minutes
+// user must verify email before they can log in
+// set cookie with token
 export const signup = async(req,res)=>{
     const {email, password, BusinessName} = req.body;
     try{
@@ -32,6 +37,11 @@ export const signup = async(req,res)=>{
         })
         await user.save();
 
+        const walletAlreadyExit = await Wallet.findOne({userId:user._id});
+        if(walletAlreadyExit){
+            res.status(400).json({sucess:false,msg:"wallet already exists"})
+        }
+
         //create wallet for user
         const wallet = new Wallet({
             userId:user._id,
@@ -55,6 +65,7 @@ export const signup = async(req,res)=>{
     }
 }
 
+//verify email
 export const verifyEmail = async(req, res)=>{
     const {code} = req.body
     try {
@@ -84,6 +95,7 @@ export const verifyEmail = async(req, res)=>{
     }
 }
 
+//user login
 export const login = async(req,res)=>{
     const {email, password} = req.body;
     try {
@@ -113,6 +125,7 @@ export const login = async(req,res)=>{
     }
 }
 
+//resend verification code
 export const resendVerificationCode = async(req,res) =>{
     const {email} = req.body;
     try {
@@ -146,6 +159,7 @@ export const resendVerificationCode = async(req,res) =>{
     }
 }
 
+//user logout
 export  const logout =(req,res)=>{
     try {
         res.clearCookie("auth_token", {
@@ -162,6 +176,7 @@ export  const logout =(req,res)=>{
     }
 }
 
+//check if user is authenticated
 export const checkAuth = async(req,res)=>{
     try {
         const user = await User.findById(req.userId);

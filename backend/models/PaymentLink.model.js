@@ -23,10 +23,6 @@ const paymentSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    currency:{
-        type:String,
-        required:true
-    },
     paymentDescription:{
         type:String,
         required:true
@@ -35,6 +31,7 @@ const paymentSchema = new mongoose.Schema({
         type:String,
         required:true
     },
+    paymentRef:String, // unique reference for the payment link
     isActive:{
         type:Boolean,
         default:true
