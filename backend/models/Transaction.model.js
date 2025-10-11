@@ -11,8 +11,8 @@ const TransactionSchema = new mongoose.Schema({
     to:String,
     amount:Number,
     paymentName:String,
-    paymentLink:String, //Link to the project the sender is paying for 
     paymentRef:String, // unique reference for the payment link
+    reference:String, // unique reference for the transaction
     transactionType:{
         type:String,
         enum:["credit","debit"],

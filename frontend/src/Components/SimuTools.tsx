@@ -1,0 +1,55 @@
+import React from 'react'
+import {Link, Power, CircleCheckBig} from 'lucide-react';
+
+
+function SimuTools() {
+    const Tools=[
+        {
+            logo:Power,
+            heading:"Payment Buttons",
+            text:"Create seamless payment experiences for your customer, just at the tap of a button."
+        },
+        {
+            logo:Link,
+            heading:"Payment Links",
+            text:"Create shareable links to request payments from customers worldwide."
+        },
+        {
+            logo:CircleCheckBig,
+            heading:"Payment Checkout",
+            text:"Easily collect payments from your customers, anywhere. There, one less thing to worry about."
+        },
+    ]
+  return (
+    <section id="Tools" className='text-center my-20 mx-20'>
+      <h1 className='text-4xl font-bold mb-5'>Accept payments and grow your business with our tools</h1>
+      <p className='text-red-600 font-light mb-15'>Powerful business tools to give you and your business, lightning speed access to your money and payouts.</p>
+      <div className='grid lg:grid-cols-3 gap-10 md:grid-cols-2 grid-cols-1'>
+        {
+            Tools.map((tool, index)=>(
+                <div className=''>
+                    <tool.logo className='mx-auto' size={40}/>
+                    <h2 className='text-2xl font-bold my-4'>{tool.heading}</h2>
+                    <p className=''>{tool.text}</p>
+                </div>
+            ))
+        }
+      </div>
+      <div className='md:my-20 my-10 grid md:grid-cols-2 grid-cols-1 gap-5'>
+        <div>
+            <img src="https://uploads-ssl.webflow.com/62e3c55a5fb057c5b2954338/62e44057b9a9376a10259e0f_image%201.svg" alt="" />
+        </div>
+        <div className='flex flex-col justify-center space-y-6'>
+            <h1 className='text-4xl font-bold '>
+                All-in-one pricing to cater for your business growth
+            </h1>
+            <p className=''>Integrate the power of crypto for your business with our flexible pricing and low transaction fees, without breaking the bank.</p>
+            <p className='text-red-600'>coming soon...</p>
+        </div>
+      </div>
+     
+    </section>
+  )
+}
+
+export default SimuTools

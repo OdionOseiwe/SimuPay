@@ -3,7 +3,6 @@ const router = express.Router()
 import { createPaymentLink, getAllPaymentLinks } from "../controllers/Payment.controller.js"
 import { protect } from "../middlewares/protect.js"
 
-
 // protect middleware to protect routes
 // only logged in users can access these routes
 

@@ -1,6 +1,28 @@
 import { Wallet } from "../models/Wallet.model.js";
 import { Transaction } from "../models/Transaction.model.js";
 import {User} from '../models/User.model.js'
+import { generateRefernce } from "../utils/generateRefernce.js";
+
+export const mockMoney = async (req, res) => {
+  const { amount } = req.body;
+  if (amount <= 0) {
+    return res.status(400).json({ success: false, msg: "invalid amount" });
+  }
+
+  try {
+    const wallet = await Wallet.findOne({ userId: req.userId });
+    if (!wallet) {
+      return res.status(404).json({ success: false, msg: "wallet not found" });
+    }
+    wallet.balance += amount;
+    await wallet.save();
+    
+    res.status(200).json({ success: true, balance: wallet.balance });  
+  } catch (error) {
+    console.log("error mocking money", error);
+    res.status(500).json({ success: false, msg: "internal server error" });
+  }
+};  
 
 // transfer money to wallet using business name Or user name as identifier
 export const transferToWallet = async (req, res) => {
@@ -24,7 +46,7 @@ export const transferToWallet = async (req, res) => {
         }
         let receiverWallet = await Wallet.findOne({ userId: receiver._id });
         let senderWallet = await Wallet.findOne({ userId: req.userId });
-
+        let reference = generateRefernce();
         if (!receiverWallet) {
           return res
             .status(404)
@@ -56,7 +78,8 @@ export const transferToWallet = async (req, res) => {
             amount,
             paymentName: "Transfer to wallet",
             paymentRef: "N/A",
-            transactionType: "debit"
+            transactionType: "debit",
+            reference
         });
         await senderTransaction.save();
 
@@ -67,7 +90,8 @@ export const transferToWallet = async (req, res) => {
             amount,
             paymentName: "Transfer to wallet",
             paymentRef: "N/A",
-            transactionType: "credit"
+            transactionType: "credit",
+            reference
         });
         await receiverTransaction.save();
 
@@ -79,13 +103,14 @@ export const transferToWallet = async (req, res) => {
     }
 };
 
+//TODO: reference 
 export const withdrawFromWallet = async (req, res) => {
-    const { amount, bankName, accountName, accountNumber } = req.body;
+    const { amount, bankName, accountName, accountNumber, description } = req.body;
 
     if (!amount || amount <= 0) {
         return res.status(400).json({ success: false, msg: "invalid amount" });
     }
-    if (!bankName || !accountName || !accountNumber) {
+    if (!bankName || !accountName || !accountNumber || !description) {
         return res
             .status(400)
             .json({ success: false, msg: "all fields are required" });
@@ -93,7 +118,7 @@ export const withdrawFromWallet = async (req, res) => {
     try {
         let sender = await User.findOne({ _id: req.userId });
         let senderWallet = await Wallet.findOne({ userId: req.userId });
-
+        let reference = generateRefernce();
         if (!senderWallet) {
             return res
                 .status(404)
@@ -116,7 +141,8 @@ export const withdrawFromWallet = async (req, res) => {
             amount,
             paymentName: `Withdraw to ${bankName} - ${accountNumber} ${accountName} ${amount}`,
             paymentRef: "N/A",
-            transactionType: "debit"
+            transactionType: "debit",
+            reference,
         });
         await senderTransaction.save();
         res
@@ -141,3 +167,5 @@ export const getWalletBalance = async (req, res) => {
     res.status(500).json({ success: false, msg: "internal server error" });
   }
 }
+
+

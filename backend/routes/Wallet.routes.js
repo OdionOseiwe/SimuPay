@@ -1,7 +1,7 @@
 import express from "express"
 const router = express.Router()
 import {protect} from '../middlewares/protect.js'
-import { getWalletBalance } from "../controllers/Wallet.controller.js"
+import { getWalletBalance, mockMoney, transferToWallet, withdrawFromWallet } from "../controllers/Wallet.controller.js"
 
 // all routes here are prefixed with /api/wallet
 // protect middleware to protect routes
@@ -9,6 +9,15 @@ import { getWalletBalance } from "../controllers/Wallet.controller.js"
 
 //get wallet balance for loged in user
 router.get('/balance', protect, getWalletBalance)
+
+//mock money to wallet for loged in user
+router.post('/mock-money', protect, mockMoney)
+
+//transfer money to another wallet using business name or user name
+router.post('/transfer', protect, transferToWallet)
+
+//withdraw money from wallet to bank account
+router.post('/withdraw', protect, withdrawFromWallet);
 
 //test route
 
