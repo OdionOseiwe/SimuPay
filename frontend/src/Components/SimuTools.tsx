@@ -21,8 +21,8 @@ function SimuTools() {
         },
     ]
   return (
-    <section id="Tools" className='text-center my-20 mx-20'>
-      <h1 className='text-4xl font-bold mb-5'>Accept payments and grow your business with our tools</h1>
+    <section id="Tools" className='text-center md:mx-20 mx-10'>
+      <h1 className='md:text-4xl text-2xl font-bold mb-5'>Accept payments and grow your business with our tools</h1>
       <p className='text-red-600 font-light mb-15'>Powerful business tools to give you and your business, lightning speed access to your money and payouts.</p>
       <div className='grid lg:grid-cols-3 gap-10 md:grid-cols-2 grid-cols-1'>
         {
@@ -40,7 +40,7 @@ function SimuTools() {
             <img src="https://uploads-ssl.webflow.com/62e3c55a5fb057c5b2954338/62e44057b9a9376a10259e0f_image%201.svg" alt="" />
         </div>
         <div className='flex flex-col justify-center space-y-6'>
-            <h1 className='text-4xl font-bold '>
+            <h1 className='md:text-4xl text-2xl font-bold '>
                 All-in-one pricing to cater for your business growth
             </h1>
             <p className=''>Integrate the power of crypto for your business with our flexible pricing and low transaction fees, without breaking the bank.</p>

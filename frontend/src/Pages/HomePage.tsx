@@ -9,7 +9,7 @@ function HomePage() {
     <div>
       <Hero/>
         <SimuTools/>
-      {/* <GrowWithSimu/> */}
+      <GrowWithSimu/>
       <Footer/>
     </div>
   )

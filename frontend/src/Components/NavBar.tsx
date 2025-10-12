@@ -1,8 +1,7 @@
-import React from 'react'
-
+import {Link} from 'react-router-dom'
 function NavBar() {
     const nav = [
-        'Home', 'Company', 'Tools', 'Product'
+        'Home', 'Developer', 'Tools', 'Growth'
     ]
   return (
     <nav className='flex justify-between p-4'>
@@ -19,8 +18,8 @@ function NavBar() {
         <li className='cursor-pointer hover:text-red-600 transition-all duration-200'>Product</li> */}
       </ol>
       <div className='flex space-x-8 mx-10'>
-        <button className=' bg-red-600 rounded-lg text-white px-4 py-2 hover:-translate-y-0.5 transition-all duration-300'>sign in</button>
-        <button className=' bg-red-600 rounded-lg text-white px-4 py-2 hover:-translate-y-0.5 transition-all duration-300'>Sign up</button>
+        <Link to = {'/login'} className=' bg-red-600 rounded-lg text-white px-4 py-2 hover:-translate-y-0.5 transition-all duration-300'>sign in</Link>
+        <Link to = {'/signup'} className=' bg-red-600 rounded-lg text-white px-4 py-2 hover:-translate-y-0.5 transition-all duration-300'>Sign up</Link>
       </div>
     </nav>
   )

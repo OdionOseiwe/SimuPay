@@ -3,7 +3,7 @@ import {HandCoins,Linkedin, Github,Twitter} from 'lucide-react'
 
 function Footer() {
   return (
-    <div className='bg-gray-900 text-white mt-20'>
+    <div className='bg-gray-900 text-gray-400 mt-20 '>
        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 max-w-7xl m-auto p-4 py-8'>
         <div className=''>
             <div className='flex items-center gap-2'>
@@ -48,8 +48,8 @@ function Footer() {
           <p>Privacy Policy</p>
         </div>
       </div>
-      <div className='py-10  text-center border-t-1 border-gray-700'>
-        Copyright © 2025 Simupay - Save Together, Win Together
+      <div className='py-10 text-gray-500  text-center border-t-1 border-gray-700'>
+        Copyright © 2025 Simupay 
 
       </div>
     </div>
