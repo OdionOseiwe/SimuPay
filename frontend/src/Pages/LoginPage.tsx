@@ -9,6 +9,7 @@ function LoginPage() {
         <div className='px-10 py-5 flex items-center bg-gray-100 rounded-xl flex-col  my-10'>
             <h2 className='text-xl font-bold mt-5 '>Welcome back</h2>
             <p className='text-gray-500 mt-3 '>Please enter your details.</p>
+            
           <div className='mt-10 mb-6'>
             <form action="">
                 <Input Icon={Mail} placeholder='enter your email' type='email' />

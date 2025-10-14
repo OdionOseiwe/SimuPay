@@ -5,16 +5,43 @@ import userRouter from './routes/User.routes.js'
 import PaymentLinkRouter from './routes/PaymentLink.routes.js'
 import TransactionRouter from './routes/Transaction.routes.js'
 import WalletRouter from './routes/Wallet.routes.js'
+import path from 'path';
+
 
 
 const app = express()
+const __dirname = path.resolve();
+
+// cors configuration
+// formally the frontend is running on localhost:3000 and backend on localhost:5000
+// so the browser will block the request from frontend to backend due to CORS policy
+// to avoid this we need to enable CORS on the backend and allow the frontend to access the backend
+// by setting origin to frontend url and credentials to true to allow cookies to be sent with the request
+app.use(cors({origin:"http://localhost:3000", credentials:true})) // So the frontend can access the backend with cookies 
+
 app.use(cookieParser())
 app.use(express.json());
+
 
 app.use('/smipay/api/user',userRouter);
 app.use('/smipay/api',PaymentLinkRouter);
 app.use('/smipay/api',TransactionRouter);
 app.use('/smipay/api/wallet',WalletRouter);
+
+
+
+// serving static files in production
+// So the express server can serve the react frontend
+// normally the react frontend is built and served by a separate server
+// but in production we can serve the built react frontend with the express server
+// by using express.static middleware to serve the static files from the build folder
+if (process.env.NODE_ENV === "production" ) {
+    app.use(express.static(path.join(__dirname, "frontend/build")));
+
+    app.get("*", (req,res)=>{
+        res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
+    })
+}
 
 app.listen(process.env.PORT, () => {
     ConnectMongoDB();

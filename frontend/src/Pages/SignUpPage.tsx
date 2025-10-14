@@ -18,7 +18,7 @@ function SignUpPage() {
 
             </form>
           </div>
-          <p className='self-start'>Have an account? <Link to={'login'} className='text-red-600'>Log in</Link></p>
+          <p className='self-start'>Have an account? <Link to={'/login'} className='text-red-600'>Log in</Link></p>
             
         </div>
     </div>

@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import crypto from 'crypto'
 import dotenv from 'dotenv'
 import {generateTokenAndSetCookie} from '../utils/generateAndSetToken.js'
+import {sendVerificationEmail, welcomeEmail} from '../mailTrap/mail.js'
 dotenv.config()
 
 //user signup
@@ -32,7 +33,7 @@ export const signup = async(req,res)=>{
             password:hashPassword,
             BusinessName,
             verificationToken: randomToken,
-            verificationTokenExpireAt:Date.now() + 2 * 60 * 1000, // 2 minutes
+            verificationTokenExpireAt:Date.now() + 5 * 60 * 1000, // 5 minutes
             
         })
         await user.save();
@@ -53,8 +54,9 @@ export const signup = async(req,res)=>{
         generateTokenAndSetCookie(res, user._id);
 
         //token email sent
+        await sendVerificationEmail(email,randomToken);
 
-        res.status(200).json({sucess:false,user:{
+        res.status(200).json({sucess:true,user:{
             ...user._doc,
             password:undefined
         }})
@@ -84,7 +86,8 @@ export const verifyEmail = async(req, res)=>{
         user.save();
 
         //welcome mail sent
-
+        await welcomeEmail(user.email, user.BusinessName);
+        
         res.status(200).json({
             success:true, msg:"Welcome Mail sent"
         });
@@ -151,7 +154,9 @@ export const resendVerificationCode = async(req,res) =>{
         res.status(200).json({
             success:true, msg:"verification code resent", code:randomToken
         });
+
         //resend email with token
+        await sendVerificationEmail(email,randomToken);
 
     } catch (error) {
         res.status(400).json({sucess: false, msg:"error occured"})

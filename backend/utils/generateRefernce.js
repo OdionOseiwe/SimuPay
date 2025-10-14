@@ -6,5 +6,3 @@ export const generateRefernce = () =>{
     const timeStamp =  Date.now();
     return `${prefix}-${timeStamp}-${randomToken}`
 }
-
-console.log("working",generateRefernce() );
