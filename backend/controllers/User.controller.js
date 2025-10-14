@@ -89,7 +89,11 @@ export const verifyEmail = async(req, res)=>{
         await welcomeEmail(user.email, user.BusinessName);
         
         res.status(200).json({
-            success:true, msg:"Welcome Mail sent"
+            success:true, msg:"Welcome Mail sent",
+            user:{
+                ...user._doc,
+                password:undefined
+            }
         });
 
     } catch (error) {
@@ -113,7 +117,12 @@ export const login = async(req,res)=>{
         const hashPassword = user.password;
         const comparePassword = await bcrypt.compare(password, hashPassword);
         if (!comparePassword) {
-            res.status(404).json({sucess:false, msg:"invalid password"})
+            res.status(404).json({sucess:false, msg:"invalid password",
+            user:{
+                ...user._doc,
+                password:undefined
+            }
+            })
         }
 
         generateTokenAndSetCookie(res, user._id);

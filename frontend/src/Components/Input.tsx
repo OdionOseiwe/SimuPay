@@ -4,6 +4,10 @@ type PropsTypes ={
     Icon?:any,
     placeholder:string,
     type: string
+    name:string,
+    value:string | number,
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+
 }
 
 function Input({Icon, ...props}: PropsTypes) {

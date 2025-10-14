@@ -6,6 +6,7 @@ import PaymentLinkRouter from './routes/PaymentLink.routes.js'
 import TransactionRouter from './routes/Transaction.routes.js'
 import WalletRouter from './routes/Wallet.routes.js'
 import path from 'path';
+import cors from 'cors'
 
 
 
@@ -17,16 +18,16 @@ const __dirname = path.resolve();
 // so the browser will block the request from frontend to backend due to CORS policy
 // to avoid this we need to enable CORS on the backend and allow the frontend to access the backend
 // by setting origin to frontend url and credentials to true to allow cookies to be sent with the request
-app.use(cors({origin:"http://localhost:3000", credentials:true})) // So the frontend can access the backend with cookies 
+app.use(cors({origin:"http://localhost:5173", credentials:true})) // So the frontend can access the backend with cookies 
 
 app.use(cookieParser())
 app.use(express.json());
 
 
-app.use('/smipay/api/user',userRouter);
-app.use('/smipay/api',PaymentLinkRouter);
-app.use('/smipay/api',TransactionRouter);
-app.use('/smipay/api/wallet',WalletRouter);
+app.use('/simupay/api/user',userRouter);
+app.use('/simupay/api',PaymentLinkRouter);
+app.use('/simupay/api',TransactionRouter);
+app.use('/simupay/api/wallet',WalletRouter);
 
 
 
