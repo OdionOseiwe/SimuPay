@@ -27,7 +27,7 @@ type AuthStore = {
   // Actions
   signUp: (email: string, password: string, name: string) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
-  verifyEmail:(code:number) => Promise<void>;
+  verifyEmail:(code:string) => Promise<void>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
 };
@@ -68,9 +68,18 @@ export const useAuthStore = create<AuthStore>((set) => ({
   verifyEmail: async(code) =>{
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.post(`${HOST_URL}/login`, { email, password });
-    } catch (error) {
-      
+      const response = await axios.post(`${HOST_URL}/verify-email`, { code });
+      set({
+        user: response.data.user,
+        isAuthenticated: true,
+        isLoading: false,
+      });
+    } catch (error:any) {
+      set({
+        error: error|| "Error  verifying email",
+        isLoading: false,
+      });
+      throw error;
     }
   },
 

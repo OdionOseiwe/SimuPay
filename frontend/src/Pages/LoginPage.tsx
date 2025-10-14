@@ -1,8 +1,39 @@
 import Input from '../Components/Input'
 import {Mail, Lock} from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link ,useNavigate} from 'react-router-dom'
+import {useAuthStore,} from '../store/authstore'
+import { useState } from 'react'
+import toast from 'react-hot-toast';
+
+type formType ={
+  email:string,
+  password:string,
+}
 
 function LoginPage() {
+    const {login, isLoading} = useAuthStore();
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState<formType>({
+    email:'',
+    password:'',
+  })
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+
+  const handlelogin = async(e: React.ChangeEvent<HTMLInputElement>)=>{
+    try {
+      e.preventDefault()
+      await login(formData.email, formData.password)
+      navigate('/dashboard');
+      toast.success("welcome here",{ duration: 10000 });
+    } catch (error) {
+      console.log('error loging in ', error);
+      toast.error(error.message,{ duration: 10000 });
+    }
+  }
   return (
     <div className='min-h-screen flex flex-col m-auto mt-20 items-center'>
         <h1 className='text-2xl text-red-600 font-semibold'>SimuPay</h1>
@@ -12,10 +43,9 @@ function LoginPage() {
             
           <div className='mt-10 mb-6'>
             <form action="">
-                <Input Icon={Mail} placeholder='enter your email' type='email' />
-                <Input Icon={Lock} placeholder='password' type='password' />
-                <button className='w-full md:text-xl mt-6 cursor-pointer bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1'>sign in</button>
-
+                <Input onChange={handleChange} Icon={Mail} placeholder='enter your email' type='email' value={formData.email} name= 'email' />
+                <Input onChange={handleChange}  Icon={Lock} placeholder='password' type='password' value={formData.password} name= 'password' />
+                <button onClick={(e)=> handlelogin(e)} className='w-full md:text-xl mt-6 cursor-pointer bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1'>{isLoading ? "signing in": "sign in"}</button>
             </form>
           </div>
           <p className='self-start'>Don't have an account? <Link to={'/signup'} className='text-red-600'>Sign up</Link></p>
