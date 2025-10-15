@@ -3,7 +3,7 @@ import React from 'react'
 function DashboardPage() {
   return (
     <div>
-      <h1 className='text-center bg-red-600'>Welcome here</h1>
+      <h1 className='text-center text-red-500 text-2xl'>Welcome to dashboard</h1>
     </div>
   )
 }

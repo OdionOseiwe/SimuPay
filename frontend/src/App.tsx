@@ -14,7 +14,7 @@ function App() {
         <Route path="/signup" element={<SignUpPage/>}/>
         <Route path="/login" element={<LoginPage/>}/>
         <Route path="/verify-email" element={<VerifyEmailPage/>}/>
-        <Route path="/dashboard" element={<VerifyEmailPage/>}/>
+        <Route path="/dashboard" element={<DashboardPage/>}/>
       </Routes>  
       <Toaster />
     </>

@@ -29,9 +29,9 @@ function LoginPage() {
       await login(formData.email, formData.password)
       navigate('/dashboard');
       toast.success("welcome here",{ duration: 10000 });
-    } catch (error) {
+    } catch (error:any) {
       console.log('error loging in ', error);
-      toast.error(error.message,{ duration: 10000 });
+      toast.error(error.response.data.msg || error.message || "An Error occured",{ duration: 10000 });
     }
   }
   return (
@@ -45,7 +45,7 @@ function LoginPage() {
             <form action="">
                 <Input onChange={handleChange} Icon={Mail} placeholder='enter your email' type='email' value={formData.email} name= 'email' />
                 <Input onChange={handleChange}  Icon={Lock} placeholder='password' type='password' value={formData.password} name= 'password' />
-                <button onClick={(e)=> handlelogin(e)} className='w-full md:text-xl mt-6 cursor-pointer bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1'>{isLoading ? "signing in": "sign in"}</button>
+                <button onClick={(e)=> handlelogin(e)} className='w-full md:text-xl mt-6 cursor-pointer bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1'>{isLoading ? "signing in...": "sign in"}</button>
             </form>
           </div>
           <p className='self-start'>Don't have an account? <Link to={'/signup'} className='text-red-600'>Sign up</Link></p>

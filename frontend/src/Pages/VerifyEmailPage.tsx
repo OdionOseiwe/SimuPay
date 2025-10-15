@@ -5,11 +5,9 @@ import {useAuthStore,} from '../store/authstore'
 import toast from 'react-hot-toast';
 import {useNavigate} from 'react-router-dom'
 
-
-
 function VerifyEmailPage() {
   const [code , setCode] = useState<string>('')
-  const {verifyEmail, isLoading} = useAuthStore();
+  const {verifyEmail, resendVerificationCode, email, isLoading} = useAuthStore();
   const navigate = useNavigate()
 
     const handleVerifyEmail = async(e:React.ChangeEvent<HTMLInputElement>)=>{
@@ -18,9 +16,20 @@ function VerifyEmailPage() {
         await verifyEmail(code)
         navigate('/login');
         toast.success("email verified",{ duration: 10000 });
-      } catch (error) {
+      } catch (error:any) {
        console.log('error verifying email ', error);
-       toast.error(error.message,{ duration: 10000 });
+       toast.error(error.response.data.msg || error.message || "An Error occured",{ duration: 10000 });
+      }
+    }
+
+    const handleResendCode = async(e:React.ChangeEvent<HTMLInputElement>)=>{
+      e.preventDefault();
+      try {
+        await resendVerificationCode(email)
+        toast.success("check email for code",{ duration: 10000 });
+      } catch (error:any) {
+       console.log('error sending code ', error);
+       toast.error(error.response.data.msg || error.message || "An Error occured",{ duration: 10000 });
       }
     }
 
@@ -30,13 +39,13 @@ function VerifyEmailPage() {
             <h1 className='md:text-2xl text-xl font-semibold'>Verify your Email Address</h1>
             <p className='text-gray-500 mt-3 '>A verification code has been sent to your email</p>
             <div className='mt-10 mb-6'>
-                <p>Please Check your inbox and enter the verification code below to verify your email address. The code will expire in 2 minutes</p>
+                <p>Please Check your inbox and enter the verification code below to verify your email address. The code will expire in 5 minutes</p>
                 <form action="">
                     <Input Icon={ShieldCheck}  placeholder='enter code' type='number'name='code' value={code} onChange={(e)=>setCode(e.target.value)}/>
-                    <button onClick={(e)=> handleVerifyEmail(e)} className='w-full md:text-xl  mt-6 cursor-pointer bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1'>{isLoading ? "verifying email ":"verify"}</button>
+                    <button onClick={(e)=> handleVerifyEmail(e)} className='w-full md:text-xl  mt-6 cursor-pointer bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1'>{isLoading ? "verifying email... ":"verify"}</button>
                 </form>
             </div> 
-            <a href="" className='text-red-600 flex self-start space-x-2'><RefreshCw/> <span>Resend code</span> </a>       
+            <a onClick={(e)=>handleResendCode(e)} href="" className='text-red-600 flex self-start space-x-2'><RefreshCw/> <span>Resend code</span> </a>       
         </div>
     </div>
    
