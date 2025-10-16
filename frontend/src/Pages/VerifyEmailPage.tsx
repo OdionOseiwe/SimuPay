@@ -7,7 +7,7 @@ import {useNavigate} from 'react-router-dom'
 
 function VerifyEmailPage() {
   const [code , setCode] = useState<string>('')
-  const {verifyEmail, resendVerificationCode, email, isLoading} = useAuthStore();
+  const {  verifyEmail, resendVerificationCode, email,  isVerifying, isResending } = useAuthStore();  
   const navigate = useNavigate()
 
     const handleVerifyEmail = async(e:React.ChangeEvent<HTMLInputElement>)=>{
@@ -25,7 +25,9 @@ function VerifyEmailPage() {
     const handleResendCode = async(e:React.ChangeEvent<HTMLInputElement>)=>{
       e.preventDefault();
       try {
+        console.log("before call");
         await resendVerificationCode(email)
+        console.log("after call");
         toast.success("check email for code",{ duration: 10000 });
       } catch (error:any) {
        console.log('error sending code ', error);
@@ -42,10 +44,14 @@ function VerifyEmailPage() {
                 <p>Please Check your inbox and enter the verification code below to verify your email address. The code will expire in 5 minutes</p>
                 <form action="">
                     <Input Icon={ShieldCheck}  placeholder='enter code' type='number'name='code' value={code} onChange={(e)=>setCode(e.target.value)}/>
-                    <button onClick={(e)=> handleVerifyEmail(e)} className='w-full md:text-xl  mt-6 cursor-pointer bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1'>{isLoading ? "verifying email... ":"verify"}</button>
+                    <button onClick={(e)=> handleVerifyEmail(e)} className='w-full md:text-xl  mt-6 cursor-pointer bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1'>  {isVerifying ? "Verifying email..." : "Verify"}</button>
                 </form>
             </div> 
-            <a onClick={(e)=>handleResendCode(e)} href="" className='text-red-600 flex self-start space-x-2'><RefreshCw/> <span>Resend code</span> </a>       
+            <button onClick={(e)=>handleResendCode(e)}
+              className='text-red-600 flex self-start space-x-2 cursor-pointer'>
+              <RefreshCw className={isResending ? 'animate-spin' : ''}/>
+              <span>{isResending ? "Resending..." : "Resend code"}</span>
+            </button>
         </div>
     </div>
    

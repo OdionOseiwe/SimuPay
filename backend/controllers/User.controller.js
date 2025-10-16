@@ -20,8 +20,8 @@ export const signup = async(req,res)=>{
             res.status(400).json({sucess:false,msg:"empty body"})
         }
         const userAlreadyExit = await User.findOne({email});
-        if(userAlreadyExit){
-            res.status(400).json({sucess:false,msg:"user already"})
+        if(userAlreadyExit ){
+            res.status(400).json({sucess:false,msg:"user already exits"})
         }
         const randomToken = crypto.randomInt(10000, 99999);
 
@@ -149,11 +149,6 @@ export const resendVerificationCode = async(req,res) =>{
             res.status(200).json({
                 success:false, msg:"user verified"
             });   
-        }
-        if (user.verificationTokenExpireAt > Date.now()) {
-            res.status(200).json({
-                success:false, msg:"token not expired"
-            });
         }
 
         const randomToken = crypto.randomInt(10000, 99999);

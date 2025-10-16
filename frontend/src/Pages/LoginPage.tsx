@@ -1,5 +1,5 @@
 import Input from '../Components/Input'
-import {Mail, Lock} from 'lucide-react'
+import {Mail, Lock,Eye,EyeOff} from 'lucide-react'
 import { Link ,useNavigate} from 'react-router-dom'
 import {useAuthStore,} from '../store/authstore'
 import { useState } from 'react'
@@ -11,8 +11,9 @@ type formType ={
 }
 
 function LoginPage() {
-    const {login, isLoading} = useAuthStore();
+  const {login, isLoading} = useAuthStore();
   const navigate = useNavigate();
+  const [eye, setEye] = useState<Boolean>(false)
   const [formData, setFormData] = useState<formType>({
     email:'',
     password:'',
@@ -44,7 +45,13 @@ function LoginPage() {
           <div className='mt-10 mb-6'>
             <form action="">
                 <Input onChange={handleChange} Icon={Mail} placeholder='enter your email' type='email' value={formData.email} name= 'email' />
-                <Input onChange={handleChange}  Icon={Lock} placeholder='password' type='password' value={formData.password} name= 'password' />
+                <div className='flex items-center'>
+                    <Input onChange={handleChange}  Icon={Lock} placeholder='password' type={eye ? 'text': 'password'} value={formData.password} name= 'password' /> 
+                    {
+                      <span className='relative right-10' onClick={()=>setEye(!eye)}>{eye ? <Eye/> : <EyeOff/>}</span>
+                    }
+                </div>
+                
                 <button onClick={(e)=> handlelogin(e)} className='w-full md:text-xl mt-6 cursor-pointer bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1'>{isLoading ? "signing in...": "sign in"}</button>
             </form>
           </div>

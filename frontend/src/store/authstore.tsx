@@ -19,6 +19,8 @@ type AuthStore = {
   isAuthenticated: boolean;
   error: string | null;
   isLoading: boolean;
+  isVerifying: boolean;
+  isResending: boolean;
   isCheckingAuth: boolean;
   message: string | null;
 
@@ -37,6 +39,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
   isAuthenticated: false,
   error: null,
   isLoading: false,
+  isVerifying: false,
+  isResending: false,
   isCheckingAuth: true,
   message: null,
 
@@ -54,7 +58,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
         isAuthenticated: true,
         isLoading: false,
         email:email, //to be used in resend-verification code email component
-      });    
+      });  
+      console.log(response);  
     } catch (error: any) {
       set({
         error: error.response?.data?.msg || error.message || "Error signing up",
@@ -64,41 +69,43 @@ export const useAuthStore = create<AuthStore>((set) => ({
     }
   },
 
-  verifyEmail: async(code) =>{
-    set({ isLoading: true, error: null });
+  verifyEmail: async (code) => {
+    set({ isVerifying: true, error: null });
     try {
       const response = await axios.post(`${HOST_URL}/user/verify-email`, { code });
       set({
         user: response.data.user,
         isAuthenticated: true,
-        isLoading: false,
+        isVerifying: false,
       });
-    } catch (error:any) {
+    } catch (error: any) {
       set({
-        error: error.response?.data?.msg || error.message || "Error  verifying email",
-        isLoading: false,
+        error: error.response?.data?.msg || error.message || "Error verifying email",
+        isVerifying: false,
       });
       throw error;
     }
   },
 
-  resendVerificationCode: async(email)=>{
-    set({ isLoading: true, error: null });
+  resendVerificationCode: async (email) => {
+    set({ isResending: true, error: null });
     try {
       const response = await axios.post(`${HOST_URL}/user/resend-verification-code`, { email });
       set({
-        user: response.data,
-        isLoading: false,
+        message: response.data.message || "Verification code resent",
+        isResending: false,
       });
-    } catch (error:any) {
+      console.log(response);
+      
+    } catch (error: any) {
       set({
         error: error.response?.data?.msg || error.message || "Error resending code",
-        isLoading: false,
+        isResending: false,
       });
       throw error;
     }
   },
-
+  
   // 🟩 Login
   login: async (email, password) => {
     set({ isLoading: true, error: null });

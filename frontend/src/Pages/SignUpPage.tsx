@@ -1,5 +1,5 @@
 import Input from '../Components/Input'
-import { Mail, Lock, User } from 'lucide-react'
+import { Mail, Lock, User, EyeOff, Eye } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/authstore'
 import { useState } from 'react'
@@ -14,6 +14,7 @@ type formType = {
 function SignUpPage() {
   const { signUp, isLoading } = useAuthStore()
   const navigate = useNavigate()
+  const [eye, setEye] = useState<Boolean>(false)
   const [formData, setFormData] = useState<formType>({
     email: '',
     password: '',
@@ -87,14 +88,12 @@ function SignUpPage() {
               onChange={handleChange}
             />
             <div>
-              <Input
-                Icon={Lock}
-                placeholder="Password"
-                type="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-              />
+               <div className='flex items-center'>
+                    <Input onChange={handleChange}  Icon={Lock} placeholder='password' type={eye ? 'text': 'password'} value={formData.password} name= 'password' /> 
+                    {
+                      <span className='relative right-10' onClick={()=>setEye(!eye)}>{eye ? <Eye/> : <EyeOff/>}</span>
+                    }
+                </div>
               <p className="text-xs text-gray-500 mt-1">
                 Password must be at least <span className="font-semibold">6 characters</span> long and contain both
                 <span className="font-semibold"> letters</span> and <span className="font-semibold">numbers</span>.

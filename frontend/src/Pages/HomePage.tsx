@@ -2,7 +2,7 @@ import React from 'react'
 import Hero from '../Components/Hero'
 import GrowWithSimu from '../Components/GrowWithSimu'
 import SimuTools from '../Components/SimuTools'
-import Footer from "../Components/Footer"
+import Footer from "../layout/Footer"
 
 function HomePage() {
   return (
