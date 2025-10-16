@@ -24,7 +24,7 @@ function LoginPage() {
     setFormData(prev => ({ ...prev, [name]: value }))
   }
 
-  const handlelogin = async(e: React.ChangeEvent<HTMLInputElement>)=>{
+  const handlelogin = async(e: React.FormEvent)=>{
     try {
       e.preventDefault()
       await login(formData.email, formData.password)
@@ -43,7 +43,7 @@ function LoginPage() {
             <p className='text-gray-500 mt-3 '>Please enter your details.</p>
             
           <div className='mt-10 mb-6'>
-            <form action="">
+            <form action="" onSubmit={handlelogin}>
                 <Input onChange={handleChange} Icon={Mail} placeholder='enter your email' type='email' value={formData.email} name= 'email' />
                 <div className='flex items-center'>
                     <Input onChange={handleChange}  Icon={Lock} placeholder='password' type={eye ? 'text': 'password'} value={formData.password} name= 'password' /> 
@@ -52,7 +52,7 @@ function LoginPage() {
                     }
                 </div>
                 
-                <button onClick={(e)=> handlelogin(e)} className='w-full md:text-xl mt-6 cursor-pointer bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1'>{isLoading ? "signing in...": "sign in"}</button>
+                <button className='w-full md:text-xl mt-6 cursor-pointer bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1'>{isLoading ? "signing in...": "sign in"}</button>
             </form>
           </div>
           <p className='self-start'>Don't have an account? <Link to={'/signup'} className='text-red-600'>Sign up</Link></p>

@@ -11,7 +11,7 @@ dotenv.config()
 // the payment link also contains a unique reference that identifies the payment
 
 export const createPaymentLink = async(req,res)=>{
-        const {paymentName, totalAmount, minimumAmountForPayment, paymentDescription} = req.body;
+        const {paymentName,  minimumAmountForPayment, paymentDescription} = req.body;
     try {
         if(!paymentName || !minimumAmountForPayment  || !paymentDescription){
             return res.status(400).json({success:false, msg:"empty fields"})
@@ -29,7 +29,6 @@ export const createPaymentLink = async(req,res)=>{
             creatorId: req.userId,
             walletId:WalletId,
             paymentName,
-            totalAmount,
             minimumAmountForPayment,
             paymentDescription,
             paymentLink: link,

@@ -10,7 +10,7 @@ function VerifyEmailPage() {
   const {  verifyEmail, resendVerificationCode, email,  isVerifying, isResending } = useAuthStore();  
   const navigate = useNavigate()
 
-    const handleVerifyEmail = async(e:React.ChangeEvent<HTMLInputElement>)=>{
+    const handleVerifyEmail = async(e:React.FormEvent)=>{
       e.preventDefault();
       try {
         await verifyEmail(code)
@@ -22,7 +22,7 @@ function VerifyEmailPage() {
       }
     }
 
-    const handleResendCode = async(e:React.ChangeEvent<HTMLInputElement>)=>{
+    const handleResendCode = async(e:React.FormEvent)=>{
       e.preventDefault();
       try {
         console.log("before call");
@@ -42,9 +42,9 @@ function VerifyEmailPage() {
             <p className='text-gray-500 mt-3 '>A verification code has been sent to your email</p>
             <div className='mt-10 mb-6'>
                 <p>Please Check your inbox and enter the verification code below to verify your email address. The code will expire in 5 minutes</p>
-                <form action="">
+                <form action="" onSubmit={(e)=> handleVerifyEmail(e)} >
                     <Input Icon={ShieldCheck}  placeholder='enter code' type='number'name='code' value={code} onChange={(e)=>setCode(e.target.value)}/>
-                    <button onClick={(e)=> handleVerifyEmail(e)} className='w-full md:text-xl  mt-6 cursor-pointer bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1'>  {isVerifying ? "Verifying email..." : "Verify"}</button>
+                    <button className='w-full md:text-xl  mt-6 cursor-pointer bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1'>  {isVerifying ? "Verifying email..." : "Verify"}</button>
                 </form>
             </div> 
             <button onClick={(e)=>handleResendCode(e)}

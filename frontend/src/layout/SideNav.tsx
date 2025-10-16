@@ -1,4 +1,5 @@
 import { ChevronDown } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 function SideNav() {
   return (
@@ -8,12 +9,12 @@ function SideNav() {
             <p className='font-light text-gray-600'>OdionTech</p>
             <ChevronDown size={15} className='text-blue-500'/>
         </div>
-      <ol className='py-8 text-gray-500 text-2xl flex flex-col space-y-2'>
-        <li>Home</li>
-        <li>Transactions</li>
-        <li>Payment links</li>
-        <li>Wallet</li>
-      </ol>
+      <div className='py-8 text-gray-500 text-xl flex flex-col space-y-2'>
+        <Link to= {'/dashboard'}>Home</Link>
+        <Link to= {'/transactions'}>Transactions</Link>
+        <Link to ={'/links'}>Payment Links</Link>
+        <Link to= {'/wallet'}>Wallet</Link>
+      </div>
     </div>
   )
 }

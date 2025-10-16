@@ -15,10 +15,6 @@ const paymentSchema = new mongoose.Schema({
         type:String,
         required:true
     },
-    totalAmount:{
-        type:String,
-        required:true
-    },
     minimumAmountForPayment:{
         type:String,
         required:true
