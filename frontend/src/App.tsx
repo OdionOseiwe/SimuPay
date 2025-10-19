@@ -6,6 +6,7 @@ import DashboardPage from "./Pages/DashboardPage"
 import PaymentLinkspage from "./Pages/PaymentLinkspage"
 import TransactionsPage from "./Pages/TransactionsPage"
 import WalletPage from "./Pages/WalletPage"
+import PaymentPage from "./Pages/PaymentPage"
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
@@ -21,6 +22,7 @@ function App() {
         <Route path="/links" element={<PaymentLinkspage/>}/>
         <Route path="/transactions" element={<TransactionsPage/>}/>
         <Route path="/wallet" element={<WalletPage/>}/>
+        <Route path="/pay/:paymentRef" element={<PaymentPage/>}/>
       </Routes>  
       <Toaster />
     </>

@@ -256,7 +256,9 @@ function PaymentLinkspage() {
                     new payment Link
                 </button>
             </div>
-            <div className="">
+            {
+              payments.length != 0 ? 
+              <div className="">
               <table className="min-w-full">
                 <thead className="bg-gray-300 py-2">
                   <tr>
@@ -327,7 +329,12 @@ function PaymentLinkspage() {
                   Next
                 </button>
               </div>
-            </div>   
+            </div>  : 
+            <h1 className='text-3xl text-center'>
+              no payment links created yet
+            </h1>
+            }
+            
         </div>
     </div>
   )
