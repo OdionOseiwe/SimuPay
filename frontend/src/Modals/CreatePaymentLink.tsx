@@ -8,11 +8,11 @@ type formType = {
 };
 
 type typeProps = {
-  isOpen: boolean;
-  setIsOpen: (close: boolean) => void;
+  isOpenCreateLinkModal: boolean;
+  setIsOpenCreateLinkModal: (close: boolean) => void;
 };
 
-function CreatePaymentLink({  setIsOpen }: typeProps) {
+function CreatePaymentLink({  setIsOpenCreateLinkModal }: typeProps) {
   const [wordCount, setWordCount] = useState(0);
 
   const [formData, setFormData] = useState({
@@ -38,14 +38,14 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElemen
     <div className="inset-0 fixed z-2 bg-white">
       <div className="flex p-4 justify-between border-b border-gray-300">
         <div className="flex space-x-3 items-center">
-          <button className="cursor-pointer" onClick={() =>setIsOpen(false)}>
+          <button className="cursor-pointer" onClick={() =>setIsOpenCreateLinkModal(false)}>
             <X />
           </button>
           <p className="text-2xl">create payment link</p>
         </div>
         <div className="flex space-x-3 text-l">
           <button
-            onClick={() => setIsOpen(false)}
+            onClick={() => setIsOpenCreateLinkModal(false)}
             className="border-1 rounded-xs py-1 px-4 cursor-pointer"
           >
             cancel

@@ -4,8 +4,7 @@ import { CreditCard, ReceiptText, Receipt } from "lucide-react";
 import CreatePaymentLink from "../Modals/CreatePaymentLink";
 
 function DashboardPage() {
-  const [isOpen, setIsOpen] = useState(false);
-        console.log("set",setIsOpen, "close", isOpen);
+  const [isOpenCreateLinkModal, setIsOpenCreateLinkModal] = useState(false);
 
   const payments = [
     {
@@ -46,7 +45,7 @@ function DashboardPage() {
             <p className="text-gray-400 my-3">{payment.message}</p>
             <button
               onClick={() =>
-                payment.button === "create payment link" ? setIsOpen(true) : null
+                payment.button === "create payment link" ? setIsOpenCreateLinkModal(true) : null
               }
               className="cursor-pointer border-1 rounded-xs p-1 w-full"
             >
@@ -56,9 +55,9 @@ function DashboardPage() {
         ))}
       </div>
 
-      { isOpen && (
+      { isOpenCreateLinkModal && (
         <div className="absolute inset-0 bg-black/40 flex items-center justify-center z-10">
-          <CreatePaymentLink isOpen={isOpen} setIsOpen={setIsOpen} />
+          <CreatePaymentLink isOpenCreateLinkModal={isOpenCreateLinkModal} setIsOpenCreateLinkModal={setIsOpenCreateLinkModal} />
         </div>
       )}
     </div>
