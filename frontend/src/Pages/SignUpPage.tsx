@@ -1,8 +1,8 @@
+import { useState } from 'react'
 import Input from '../Components/Input'
 import { Mail, Lock, User, EyeOff, Eye } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/authstore'
-import { useState } from 'react'
 import toast from 'react-hot-toast'
 
 type formType = {

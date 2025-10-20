@@ -6,6 +6,7 @@ import Footer from "../layout/Footer";
 function HomePage() {
   return (
     <div>
+      
       <Hero />
       <SimuTools />
       <GrowWithSimu />

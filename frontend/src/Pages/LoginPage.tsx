@@ -28,7 +28,7 @@ function LoginPage() {
     try {
       e.preventDefault()
       await login(formData.email, formData.password)
-      navigate('/dashboard');
+      navigate("/dashboard");
       toast.success("welcome here",{ duration: 10000 });
     } catch (error:any) {
       console.log('error loging in ', error);

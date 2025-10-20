@@ -7,7 +7,7 @@ import {useNavigate} from 'react-router-dom'
 
 function VerifyEmailPage() {
   const [code , setCode] = useState<string>('')
-  const {  verifyEmail, resendVerificationCode, email,  isVerifying, isResending } = useAuthStore();  
+  const {  verifyEmail, resendVerificationCode,  isVerifying, isResending } = useAuthStore();  
   const navigate = useNavigate()
 
     const handleVerifyEmail = async(e:React.FormEvent)=>{
@@ -25,7 +25,7 @@ function VerifyEmailPage() {
     const handleResendCode = async(e:React.FormEvent)=>{
       e.preventDefault();
       try {
-        console.log("before call");
+        const email = localStorage.getItem('email') || '';
         await resendVerificationCode(email)
         console.log("after call");
         toast.success("check email for code",{ duration: 10000 });

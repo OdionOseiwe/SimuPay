@@ -1,3 +1,4 @@
+import {useEffect} from 'react'
 import HomePage from "./Pages/HomePage"
 import SignUpPage from "./Pages/SignUpPage"
 import LoginPage from "./Pages/LoginPage"
@@ -10,24 +11,31 @@ import PaymentPage from "./Pages/PaymentPage"
 import {useAuthStore,} from './store/authstore'
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { Loader } from 'lucide-react'
+
 
 const ProtectedRoutes = ({children}: { children: any })=>{
   const {isAuthenticated, user} = useAuthStore();
 
-  if(!user?.isverified){
-    <Navigate to = '/verify-email' replace/>;
-  }
   if(!isAuthenticated){
-    <Navigate to= "/login" replace />;
+    return <Navigate to= "/login" replace />;
   }
+
+  if(!user?.isverified){
+    return <Navigate to = '/verify-email' replace/>;
+  }
+  console.log(isAuthenticated, user);
+  
   return children
 }
 
 const RedirectAuthenticateduser =({children}:{children:any}) =>{
-  const {isAuthenticated, user} = useAuthStore();
+  const {isAuthenticated, user, isCheckingAuth} = useAuthStore();
 
-  if(isAuthenticated && user?.isverified){
-    <Navigate to= "/dashboard" replace />;
+  {isCheckingAuth && <Loader size={50} color='red' className='m-auto'/>}
+
+  if(isAuthenticated && user.isverified){
+    return <Navigate to= "/dashboard" replace />;
   }
 
   return children
@@ -35,6 +43,14 @@ const RedirectAuthenticateduser =({children}:{children:any}) =>{
 
 
 function App() {
+  const {checkAuth,isCheckingAuth} = useAuthStore();
+
+  useEffect(()=>{
+    checkAuth()
+  },[checkAuth])
+
+  {isCheckingAuth && <Loader size={50} color='red' className='m-auto'/>}
+
   return (
     <>    
       <Routes>

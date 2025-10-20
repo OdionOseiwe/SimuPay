@@ -1,6 +1,6 @@
 import { useState } from "react";
 import SideNav from "../layout/SideNav";
-import { CreditCard, ReceiptText, Receipt } from "lucide-react";
+import { CreditCard, ReceiptText, Receipt, Loader} from "lucide-react";
 import CreatePaymentLink from "../Modals/CreatePaymentLink";
 
 function DashboardPage() {
@@ -33,7 +33,6 @@ function DashboardPage() {
   return (
     <div className="flex z-1 relative">
       <SideNav />
-
       <div className="grid grid-cols-3 px-10 gap-4 items-center">
         {payments.map((payment, index) => (
           <div

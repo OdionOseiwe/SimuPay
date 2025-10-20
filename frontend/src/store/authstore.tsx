@@ -57,8 +57,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
         user: response.data.user,
         isAuthenticated: true,
         isLoading: false,
-        email:email, //to be used in resend-verification code email component
       });  
+      localStorage.setItem('email', email);//to be used in resend-verification code email component
       console.log(response);  
     } catch (error: any) {
       set({
@@ -129,7 +129,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
   logout: async () => {
     set({ isLoading: true, error: null });
     try {
-      await axios.post(`${HOST_URL}/userlogout`);
+      await axios.post(`${HOST_URL}/user/logout`);
       set({
         user: null,
         isAuthenticated: false,
