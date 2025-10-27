@@ -1,6 +1,6 @@
 import express from "express"
 const router = express.Router()
-import { payWithPaymentLink,getTransactions, getTransactionByUserId, getTransactionPaymentLink } from "../controllers/Transaction.Controller.js"
+import { payWithPaymentLink,getTransactions, getTransactionByUserId, getTransactionPaymentRef ,getTransactionByReference} from "../controllers/Transaction.Controller.js"
 import { protect } from "../middlewares/protect.js"
 
 router.post('/pay/:paymentRef', protect, payWithPaymentLink);
@@ -15,8 +15,12 @@ router.get('/transactions/user', protect, getTransactionByUserId);
 
 //get transactions by payment link
 // payment link is sent as query param
-// example /api/transaction/transactions?paymentLink=abc123
-router.get('/transactions', protect, getTransactionPaymentLink);
+// example /api/transaction/transactions?paymentRef=abc123
+router.get('/transactions/by-payment-link', protect, getTransactionPaymentRef);
+
+// example /api/transaction/transactions?reference=abc123
+router.get('/transactions/reference', protect, getTransactionByReference);
+
 
 //test route
 

@@ -9,7 +9,7 @@ function WalletPage() {
     <div className='flex z-1'>
      <SideNav/>
       <div className='py-6 px-12 w-full'>
-        <div className='rounded-2xl flex justify-between bg-red-50 p-6 shadow-lg items-center'>
+        <div className='rounded-2xl flex justify-between p-6 shadow-lg items-center'>
           <div>
               <p className='text-2xl font-semibold text-gray-500'>
                 &#x20A6; {0.00}

@@ -177,7 +177,7 @@ export const getTransactionByUserId = async (req, res) => {
 };
 
 // Get transactions by payment link reference
-export const getTransactionPaymentLink = async (req, res) => {
+export const getTransactionPaymentRef = async (req, res) => {
   try {
     const { paymentRef } = req.query;
     if (!paymentRef) {

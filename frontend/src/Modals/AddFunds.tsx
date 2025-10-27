@@ -2,7 +2,7 @@ import { WalletMinimal } from 'lucide-react';
 
 export default function AddFunds() {
   return (
-      <div className="inset-0 fixed top-30 left-10/12 w-1/6 h-2/6 flex flex-col items-center py-6 px-4 text-gray-700  bg-white rounded-2xl shadow-2xl  
+      <div className="inset-0 absolute top-30 left-10/12 w-1/6 h-2/6 flex flex-col items-center py-6 px-4 text-gray-700  bg-white rounded-2xl shadow-2xl  
         transform transition-all duration-700 ease-in-out">
         <WalletMinimal size={50} className='bg-transparent text-clip text-red-600'/>
         <h1 className=" text-xs mt-3">Add Money to your Wallet</h1>

@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { X } from "lucide-react";
+import {usePaymentStore} from "../store/paymentstore"
+import toast from "react-hot-toast";
 
 type formType = {
   paymentName: string;
@@ -14,24 +16,38 @@ type typeProps = {
 
 function CreatePaymentLink({  setIsOpenCreateLinkModal }: typeProps) {
   const [wordCount, setWordCount] = useState(0);
+  const {createPaymentLink,isCreatingLinks} = usePaymentStore();
 
   const [formData, setFormData] = useState({
     paymentName: "",
     description: "",
-    minAmount: "",
+    minAmount: 0,
   });
 
-const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-  const { name, value } = e.target;
-  setFormData((prev) => ({ ...prev, [name]: value }));
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
 
-  // Count words if it's the description textarea
-  if (name === "description") {
-    const words = value.trim().split(/\s+/); // split by whitespace
-    const count = value.trim() === "" ? 0 : words.length;
-    setWordCount(count);
+    // Count words if it's the description textarea
+    if (name === "description") {
+      const words = value.trim().split(/\s+/); // split by whitespace
+      const count = value.trim() === "" ? 0 : words.length;
+      setWordCount(count);
+    }
+  };
+
+  const handleCreatePaymentLink = async (e: React.FormEvent) =>{
+    e.preventDefault();
+    // Logic to create payment link goes here
+    try {
+      await createPaymentLink(formData.paymentName, formData.minAmount, formData.description)
+      toast.success("Payment link created sucessfully");
+      setIsOpenCreateLinkModal(false);
+    } catch (error:any) {
+      console.log(error);
+      toast.error(error.response.data.msg || "Error occured while creating link");
+    }
   }
-};
 
   
   return (
@@ -50,13 +66,13 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElemen
           >
             cancel
           </button>
-          <button className="bg-red-600 text-white rounded-xs py-1 px-4">
-            Create Link
+          <button onClick={handleCreatePaymentLink} className="bg-red-600 text-white rounded-xs py-1 px-4">
+            {isCreatingLinks ? "creating link" : "create link"}
           </button>
         </div>
       </div>
       <div className="my-20 mx-20 flex flex-col items-center">
-        <form className="flex flex-col space-y-8" action="">
+        <form onSubmit={handleCreatePaymentLink} className="flex flex-col space-y-8" action="">
           <div className="">
             <input
               className="text-gray-600 w-100 border border-gray-300  px-3 py-1 rounded-lg outline-none"
@@ -97,7 +113,7 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElemen
           </div>    
 
           <button className="bg-red-600 text-white rounded-xs py-1 px-4">
-            Create Link
+            {isCreatingLinks ? "creating link" : "create link"}
           </button>
         </form>
       </div>

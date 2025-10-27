@@ -58,7 +58,7 @@ function SignUpPage() {
       navigate('/verify-email')
     } catch (error: any) {
       console.log('Error signing up:', error)
-      toast.error(error.response.data.msg || error.message || "An Error occured", { duration: 5000 })
+       toast.error(error.response.data.msg || error.message || "An Error occured", { duration: 5000 })
     }
   }
 
