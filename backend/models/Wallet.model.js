@@ -10,4 +10,4 @@ const WalletSchema = new mongoose.Schema({
 
 })
 
-export const Wallet = mongoose.model('WalletSchema', WalletSchema);
+export const Wallet = mongoose.model('Wallet', WalletSchema);

@@ -19,13 +19,14 @@ export interface Transaction {
   paymentRef: string;
   transactionType: "credit" | "debit";
   reference: string;
+  createdAt: string;
 }
 
 interface PayWithLinkData {
   fromEmail: string;
   from: string;
   amount: number;
-  paymentRef: string;
+  paymentRef: any;
 }
 
 interface TransactionState {
@@ -40,7 +41,6 @@ interface TransactionState {
   getTransactionsByPaymentLink: (paymentRef: string) => Promise<void>;
   getTransactionByReference: (reference: string) => Promise<void>;
   payWithPaymentLink: (data: PayWithLinkData) => Promise<void>;
-  resetStatus: () => void;
 }
 
 // -------------------------------
@@ -76,7 +76,7 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
       const res = await axios.get(
         `${HOST_URL}/transactions/user`
       );
-      set({ transactions: res.data.txns.flat(), loading: false });
+      set({ transactions: res.data.txns, loading: false });
     } catch (err: any) {
       console.error("Error fetching user transactions:", err);
       set({
@@ -157,6 +157,4 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
     }
   },
 
-  // ✅ Reset messages
-  resetStatus: () => set({ error: null, successMsg: null }),
 }));

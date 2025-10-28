@@ -10,7 +10,9 @@ const HOST_URL = import.meta.env.VITE_NODE_ENV as string;
 // -------------------------------
 interface WalletState {
   balance: number;
-  loading: boolean;
+  transferLoading: boolean;
+  withdrawalloading: boolean;
+  balanceLoading: boolean
   error: string | null;
   successMsg: string | null;
 
@@ -30,29 +32,31 @@ interface WithdrawData {
   amount: number;
   bankName: string;
   accountName: string;
-  accountNumber: string;
+  accountNumber: number;
   description: string;
 }
 
 export const useWalletStore = create<WalletState>((set, get) => ({
   balance: 0,
-  loading: false,
+  transferLoading: false,
+  withdrawalloading: false,  
+  balanceLoading: false,
   error: null,
   successMsg: null,
 
   // ✅ Fetch Wallet Balance
   getWalletBalance: async () => {
     try {
-      set({ loading: true, error: null });
+      set({ balanceLoading: true, error: null });
       const res = await axios.get(
         `${HOST_URL}/wallet/balance`
       );
-      set({ balance: res.data.balance, loading: false });
+      set({ balance: res.data.balance, balanceLoading: false });
     } catch (err: any) {
       console.error("Error fetching wallet balance:", err);
       set({
         error: err.response?.data?.msg || "Failed to get balance",
-        loading: false,
+        balanceLoading: false,
       });
     }
   },
@@ -60,21 +64,19 @@ export const useWalletStore = create<WalletState>((set, get) => ({
   // ✅ Mock Money
   mockMoney: async (amount) => {
     try {
-      set({ loading: true, error: null, successMsg: null });
+      set({error: null, successMsg: null });
       const res = await axios.post(
         `${HOST_URL}/wallet/mock-money`,
         { amount }
       );
       set({
         balance: res.data.balance,
-        loading: false,
         successMsg: "Money added successfully",
       });
     } catch (err: any) {
       console.error("Error mocking money:", err);
       set({
         error: err.response?.data?.msg || "Failed to add money",
-        loading: false,
       });
     }
   },
@@ -82,21 +84,21 @@ export const useWalletStore = create<WalletState>((set, get) => ({
   // ✅ Transfer to Another Wallet
   transferToWallet: async ({ userName, amount }) => {
     try {
-      set({ loading: true, error: null, successMsg: null });
+      set({ transferLoading: true, error: null, successMsg: null });
       const res = await axios.post(
         `${HOST_URL}/wallet/transfer`,
         { userName, amount }
       );
       set({
         balance: res.data.balance,
-        loading: false,
+        transferLoading: false,
         successMsg: "Transfer successful",
       });
     } catch (err: any) {
       console.error("Error transferring money:", err);
       set({
         error: err.response?.data?.msg || "Transfer failed",
-        loading: false,
+        transferLoading: false,
       });
     }
   },
@@ -110,7 +112,7 @@ export const useWalletStore = create<WalletState>((set, get) => ({
     description,
   })=> {
     try {
-      set({ loading: true, error: null, successMsg: null });
+      set({ withdrawalloading: true, error: null, successMsg: null });
       const res = await axios.post(
         `${HOST_URL}/wallet/withdraw`,
         {
@@ -123,14 +125,14 @@ export const useWalletStore = create<WalletState>((set, get) => ({
       );
       set({
         balance: res.data.balance,
-        loading: false,
+        withdrawalloading: false,
         successMsg: "Withdrawal successful",
       });
     } catch (err: any) {
       console.error("Error withdrawing money:", err);
       set({
         error: err.response?.data?.msg || "Withdrawal failed",
-        loading: false,
+        withdrawalloading: false,
       });
     }
   }

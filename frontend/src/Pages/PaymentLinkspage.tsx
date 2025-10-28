@@ -1,38 +1,21 @@
 import SideNav from '../layout/SideNav'
 import { Copy } from 'lucide-react';
 import {useState, useEffect} from 'react'
-
-type Payment ={
-    creatorId: string,
-    walletId:string,
-    paymentName : string,
-    minimumAmountForPayment: string,
-    paymentDescription: string,
-    paymentLink: string,
-    paymentRef:string,
-    createdAt: string
-}
+import {usePaymentStore} from "../store/paymentstore"
 
 function PaymentLinkspage() {
-    const randomDate = () => {
-        const daysAgo = Math.floor(Math.random() * 90);
-        const date = new Date();
-        date.setDate(date.getDate() - daysAgo);
-        return date.toISOString();
-    };
+  const {getAllPaymentLinks,links} = usePaymentStore()
 
     useEffect(()=>{
-      await 
+      getAllPaymentLinks()
     }, [])
-
-    const payments: Payment[]= [];
-
+    
     const [copied, setCopied] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
-    const totalPages = Math.ceil(payments.length / itemsPerPage);
+    const totalPages = Math.ceil(links.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentItems = payments.slice(startIndex, startIndex + itemsPerPage);
+    const currentItems = links.slice(startIndex, startIndex + itemsPerPage);
 
     const handleCopy = (link:string) => {
       navigator.clipboard.writeText(link)
@@ -60,7 +43,7 @@ function PaymentLinkspage() {
                 </button>
             </div>
             {
-              payments.length != 0 ? 
+              links.length != 0 ? 
               <div className="">
               <table className="min-w-full">
                 <thead className="bg-gray-300 py-2">

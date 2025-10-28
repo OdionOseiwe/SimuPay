@@ -64,11 +64,11 @@ export const transferToWallet = async (req, res) => {
         }
 
         // deduct from sender wallet
-        senderWallet.balance -= amount;
+        senderWallet.balance = senderWallet.balance - amount;
         await senderWallet.save();
 
         // update receiver balance
-        receiverWallet.balance += amount;
+        receiverWallet.balance = receiverWallet.balance  + amount;
         await receiverWallet.save();
 
         // create transaction for sender
@@ -96,7 +96,7 @@ export const transferToWallet = async (req, res) => {
         await receiverTransaction.save();
 
         // return new balance of sender
-        res.status(200).json({ success: true, balance: senderWallet.balance });
+        res.status(200).json({ success: true, balance: senderWallet.balance , txns:[senderTransaction, receiverTransaction] });
     } catch (error) {
         console.log("error transferring to wallet", error);
         res.status(500).json({ success: false, msg: "internal server error" });

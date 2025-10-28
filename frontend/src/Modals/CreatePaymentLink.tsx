@@ -18,7 +18,7 @@ function CreatePaymentLink({  setIsOpenCreateLinkModal }: typeProps) {
   const [wordCount, setWordCount] = useState(0);
   const {createPaymentLink,isCreatingLinks} = usePaymentStore();
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<formType>({
     paymentName: "",
     description: "",
     minAmount: 0,

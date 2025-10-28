@@ -1,12 +1,31 @@
 import Input from '../Components/Input'
 import {Mail, User,Coins} from 'lucide-react'
 import { useState } from 'react'
+import {useParams} from 'react-router-dom'
+import toast from 'react-hot-toast'
+import { useTransactionStore } from '../store/transactionstore'
+
 function PaymentPage() {
+    const paymentReference = useParams()
+    const {payWithPaymentLink} = useTransactionStore();
     const [formData, setFormData] = useState({
-        email:'',
-        fullname:'',
-        amount:'',
+        fromEmail:'',
+        from:'',
+        amount:0,
+        paymentRef: paymentReference
     })
+
+    const handlePay = async(e:React.FormEvent) =>{
+        e.preventDefault();
+        try {
+            await payWithPaymentLink({...formData});
+            toast.success("Payment successful", {duration:10000});
+        } catch (error:any) {
+            console.log("error", error);
+            toast.error(error.response.data.msg || "Error while paying" , {duration:10000})
+        }
+    }
+
     const handleChange = (e:React.ChangeEvent<HTMLInputElement>) =>{
         const {name, value} = e.target;
         setFormData(prev => ({...prev, [name]:value}))
@@ -16,7 +35,7 @@ function PaymentPage() {
         <h1 className='text-gray-400 text-2xl font-semibold pb-6'>TechOdion Enterprice</h1>
         <h3 className='text-gray-400 font-extralight text-lg pb-6'>Payment for acceptance fees</h3>
         <div className=' w-2/6 bg-white p-8 rounded-2xl shadow-2xl ' >
-        <form action="">
+        <form onSubmit={handlePay} action="">
 
             <Input onChange={handleChange} Icon={User} type='text' name='fullname' placeholder='Full Name' value={formData.fullname} />
             <Input onChange={handleChange} Icon={Mail} type='email' name='email' placeholder='Email' value={formData.email} />

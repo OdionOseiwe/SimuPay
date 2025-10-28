@@ -71,6 +71,7 @@ export const payWithPaymentLink = async (req, res) => {
 
     // Create sender (debit) transaction
     const senderTransaction = new Transaction({
+      receiverWalletId: receiverWallet._id,
       fromEmail,
       from,
       to: receiverWallet.userId,
@@ -84,6 +85,7 @@ export const payWithPaymentLink = async (req, res) => {
 
     // Create receiver (credit) transaction
     const receiverTransaction = new Transaction({
+      receiverWalletId: receiverWallet._id,
       fromEmail,
       from,
       to: receiverWallet.userId,

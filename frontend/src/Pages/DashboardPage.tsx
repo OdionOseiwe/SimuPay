@@ -1,7 +1,8 @@
 import { useState } from "react";
 import SideNav from "../layout/SideNav";
-import { CreditCard, ReceiptText, Receipt, Loader} from "lucide-react";
+import { CreditCard, ReceiptText, Receipt, Loader, User} from "lucide-react";
 import CreatePaymentLink from "../Modals/CreatePaymentLink";
+
 
 function DashboardPage() {
   const [isOpenCreateLinkModal, setIsOpenCreateLinkModal] = useState(false);

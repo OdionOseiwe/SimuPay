@@ -1,18 +1,34 @@
 import { WalletMinimal } from 'lucide-react';
+import {useWalletStore} from "../store/walletstore"
+import { useState } from 'react';
+import toast from 'react-hot-toast'
 
 export default function AddFunds() {
+  const [amount, setAmount] = useState(0)
+  const {mockMoney} = useWalletStore()
+
+  const addFunds = async(e:React.FormEvent) =>{
+    e.preventDefault();
+    try {
+      await mockMoney(amount);
+      toast.success("Funds added", {duration:10000})
+    } catch (error:any) {
+      console.log("Error", error);
+      toast.error(error.response.data.msg || "Error while adding funds")
+    }
+  }
   return (
       <div className="inset-0 absolute top-30 left-10/12 w-1/6 h-2/6 flex flex-col items-center py-6 px-4 text-gray-700  bg-white rounded-2xl shadow-2xl  
         transform transition-all duration-700 ease-in-out">
         <WalletMinimal size={50} className='bg-transparent text-clip text-red-600'/>
         <h1 className=" text-xs mt-3">Add Money to your Wallet</h1>
-        <form action="" className='flex flex-col w-full mt-4'>
+        <form onSubmit={addFunds} action="" className='flex flex-col w-full mt-4'>
             <input
             className="text-gray-600 text-xs border border-gray-300  p-2 rounded-lg outline-none"
-            // onChange={}
-            placeholder="enter amount to be added to wallet"
+            onChange={(e)=>setAmount(Number(e.target.value))}
+            placeholder="enter amount"
             type="number"
-            value={''}
+            value={amount}
             name="amount"
             required
             />

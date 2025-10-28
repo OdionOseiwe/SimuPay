@@ -58,3 +58,17 @@ export const getAllPaymentLinks = async(req, res)=>{
         res.status(500).json({success:false, msg:"internal server error"}) 
     }
 }
+
+export const getPaymentLinkByRef = async(req, res) =>{
+    const {paymentRef} = req.body
+    try { 
+        const payment = await Payment.findOne({paymentRef});
+        
+        if (!payment) {
+            res.status(404).json({ success: false, msg: "no payment details" });
+        }
+        res.status(200).json({ success: true, msg: payment });
+    } catch (error) {
+        console.log("error querying payments details", error);
+        res.status(500).json({success:false, msg:"internal server error"}) 
+    }}

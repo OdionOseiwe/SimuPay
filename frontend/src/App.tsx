@@ -96,9 +96,7 @@ function App() {
         />
 
         <Route path="/pay/:paymentRef" element={
-          <ProtectedRoutes>
-            <PaymentPage/>
-          </ProtectedRoutes>}
+            <PaymentPage/>}
         />
 
       </Routes>  

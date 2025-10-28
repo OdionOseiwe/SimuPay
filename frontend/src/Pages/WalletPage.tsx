@@ -1,9 +1,74 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import SideNav from '../layout/SideNav'
 import AddFunds from '../Modals/AddFunds';
+import {useWalletStore} from "../store/walletstore"
+import toast from "react-hot-toast";
 
 function WalletPage() {
   const [openFundsModals, setOpenFundsModals] = useState(false);
+  const {balance,getWalletBalance,transferToWallet,withdrawFromWallet,transferLoading, withdrawalloading} = useWalletStore();
+  const [transferFormData, setTransferFormData] = useState({
+    userName:'',
+    amount:0
+  })
+
+  const [withdrawFormData, setWithdrawFormData] = useState({
+    accountNumber:0,
+    bankName:'',
+    accountName:'',
+    description:'',
+    amount:0
+
+  })
+
+  const onChangeTransferData = (e:React.ChangeEvent<HTMLInputElement>) =>{
+    const {name,value} = e.target
+    setTransferFormData((prev) => ({...prev, [name]:value}))
+  }
+
+  const onChangeWithdrawData = (e:React.ChangeEvent<HTMLInputElement>) =>{
+    const {name,value} = e.target
+    setWithdrawFormData((prev) => ({...prev, [name]:value}))
+  }
+
+  useEffect(() =>{
+    getWalletBalance();
+  }, [])
+
+  const transfer = async(e:React.FormEvent) =>{
+    e.preventDefault();
+    try{
+      const res = await transferToWallet({...transferFormData});
+      setTransferFormData({
+        userName:'',
+        amount:0
+      })
+      toast.success("Transfer succesful",{ duration: 10000 });
+      console.log("res transfer", res);
+      
+    }catch(error:any){
+      console.log("error Transfer", error);
+      toast.error(error.response.data.msg || "Error transfering funds")
+    }
+  }
+
+  const withdraw = async(e:React.FormEvent) =>{
+    e.preventDefault();
+    try{
+      await withdrawFromWallet({...withdrawFormData})
+      setWithdrawFormData({
+        accountNumber:0,
+        bankName:'',
+        accountName:'',
+        description:'',
+        amount:0
+      })
+      toast.success("withdrawal succesful",{ duration: 10000 });
+    }catch(error:any){
+      console.log("error Transfer", error);
+      toast.error(error.response.data.msg || "Error Withdrawing funds")
+    }
+  }
 
   return (
     <div className='flex z-1'>
@@ -12,7 +77,7 @@ function WalletPage() {
         <div className='rounded-2xl flex justify-between p-6 shadow-lg items-center'>
           <div>
               <p className='text-2xl font-semibold text-gray-500'>
-                &#x20A6; {0.00}
+                &#x20A6; {balance}
               </p>
               <p className='text-gray-400 font-light text-lg'>
                 Available Balance
@@ -29,84 +94,84 @@ function WalletPage() {
         <div className='grid lg:grid-cols-2 gap-10'>
           <div className='mt-14' >
             <h2 className='bg-red-600 p-4 rounded-t-xl text-white text-xl font-semibold'  >Withdraw Funds</h2>
-            <form className='flex flex-col p-8 rounded-b-xl border border-gray-300' action="">
+            <form onSubmit={withdraw} className='flex flex-col p-8 rounded-b-xl border border-gray-300' action="">
               <label htmlFor="" className='mb-1'>account number</label>
               <input
                 className="text-gray-600 w-full  mb-4 border border-gray-300  px-3  py-3 rounded-lg outline-none"
-                // onChange={}
+                onChange={onChangeWithdrawData}
                 placeholder="account number"
                 type="text"
-                value={''}
+                value={withdrawFormData.accountNumber}
                 name="accountNumber"
                 required
               />
               <label htmlFor="" className='mb-1'>Bank</label>
               <input
                 className="text-gray-600 w-full  mb-4 border border-gray-300  px-3  py-3 rounded-lg outline-none"
-                // onChange={}
+                onChange={onChangeWithdrawData}
                 placeholder=" Bank name"
                 type="text"
-                value={''}
+                value={withdrawFormData.bankName}
                 name="bankName"
                 required
               />
               <label htmlFor="" className='mb-1'>account Name</label>
               <input
                 className="text-gray-600 w-full  mb-4 border border-gray-300  px-3  py-3 rounded-lg outline-none"
-                // onChange={}
+                onChange={onChangeWithdrawData}
                 placeholder=" Account Name"
                 type="text"
-                value={''}
+                value={withdrawFormData.accountName}
                 name="accountName"
                 required
               />
               <label htmlFor="" className='mb-1'>amount</label>
               <input
                 className="text-gray-600 w-full  mb-4 border border-gray-300  px-3  py-3 rounded-lg outline-none"
-                // onChange={}
+                onChange={onChangeWithdrawData}
                 placeholder=" amount"
                 type="text"
-                value={''}
+                value={withdrawFormData.amount}
                 name="amount"
                 required
               />
               <label htmlFor="" className='mb-1'>description</label>
               <input
                 className="text-gray-600 w-full  mb-4 border border-gray-300  px-3  py-3 rounded-lg outline-none"
-                // onChange={}
+                onChange={onChangeWithdrawData}
                 placeholder="description"
                 type="text"
-                value={''}
-                name="amount"
+                value={withdrawFormData.description}
+                name="description"
                 required
               />
-              <button className='w-full md:text-xl mt-6 cursor-pointer bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1'>withdraw</button>           
+              <button className='w-full md:text-xl mt-6 cursor-pointer bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1'>{withdrawalloading ? "withdrawing":"withdraw"}</button>           
             </form>
           </div>
           <div className='flex flex-col mt-14'>
             <h2 className='bg-red-600 p-4 rounded-t-xl text-white text-xl font-semibold'  >Transfer Funds</h2>
-            <form action="" className='flex flex-col p-10 rounded-b-xl border border-gray-300' >
-              <label htmlFor="" className='mb-1'>User Name</label>
+            <form onSubmit={transfer} action="" className='flex flex-col p-10 rounded-b-xl border border-gray-300' >
+              <label htmlFor="" className='mb-1'>Business Name</label>
               <input
                 className="text-gray-600 w-full border border-gray-300 mb-4  px-3  py-3 rounded-lg outline-none"
-                // onChange={}
-                placeholder="User name"
+                onChange={onChangeTransferData}
+                placeholder="Business Name"
                 type="text"
-                value={''}
+                value={transferFormData.userName}
                 name="userName"
                 required
               /> 
              <label htmlFor="" className='mb-1'>amount</label>
               <input
                 className="text-gray-600 w-full border border-gray-300 mb-4  px-3  py-3 rounded-lg outline-none"
-                // onChange={}
+                onChange={onChangeTransferData}
                 placeholder="amount"
                 type="number"
-                value={''}
+                value={transferFormData.amount}
                 name="amount"
                 required
               />   
-              <button className='w-full md:text-xl mt-6 cursor-pointer bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1'>Transfer</button>           
+              <button className='w-full md:text-xl mt-6 cursor-pointer bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1'>{transferLoading ? "transferring": "transfer"}</button>           
             </form>
               
           </div>

@@ -6,19 +6,20 @@ axios.defaults.withCredentials = true;
 const HOST_URL = import.meta.env.VITE_NODE_ENV;
 
 type PaymentType ={
-    creatorId:string,
+    creatorId: string,
     walletId:string,
-    paymentName:string,
-    minimumAmountForPayment:number,
-    paymentDescription:string,
+    paymentName : string,
+    minimumAmountForPayment: string,
+    paymentDescription: string,
     paymentLink: string,
-    paymentRef:string
+    paymentRef:string,
+    createdAt: string
 }
 
 type paymentStore ={
     isGetingLinks: Boolean,
     isCreatingLinks:Boolean,
-    links:PaymentType[] | null,
+    links:PaymentType[],
     createPaymentLink: ( paymentName:string,minimumAmountForPayment:number,paymentDescription:string) => Promise<void>
     getAllPaymentLinks: () => Promise<void>
 }
@@ -26,7 +27,7 @@ type paymentStore ={
 export const usePaymentStore = create<paymentStore>((set) => ({
     isGetingLinks: false,
     isCreatingLinks:false,
-    links:null,
+    links:[],
 
     // ✅ create payment link
     createPaymentLink: async(paymentName,  minimumAmountForPayment, paymentDescription) =>{
