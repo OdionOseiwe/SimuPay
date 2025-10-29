@@ -63,16 +63,17 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
     } catch (err: any) {
       console.error("Error fetching transactions:", err);
       set({
-        error: err.response?.data?.msg || "Failed to fetch transactions",
+        error: "Failed to fetch transactions",
         loading: false,
       });
+      throw err
     }
   },
 
   // ✅ Fetch transactions by logged-in user
   getUserTransactions: async () => {
     try {
-      set({ loading: true, error: null });
+       set({ loading: true, error: null });
       const res = await axios.get(
         `${HOST_URL}/transactions/user`
       );
@@ -80,9 +81,10 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
     } catch (err: any) {
       console.error("Error fetching user transactions:", err);
       set({
-        error: err.response?.data?.msg || "Failed to fetch user transactions",
+        error: "Failed to fetch user transactions",
         loading: false,
       });
+      throw err
     }
   },
 
@@ -98,11 +100,10 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
     } catch (err: any) {
       console.error("Error fetching transactions by payment link:", err);
       set({
-        error:
-          err.response?.data?.msg ||
-          "Failed to fetch transactions for this payment link",
+        error:"Failed to fetch transactions for this payment link",
         loading: false,
       });
+      throw err
     }
   },
 
@@ -122,10 +123,10 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
     } catch (err: any) {
       console.error("Error fetching transaction by reference:", err);
       set({
-        error:
-          err.response?.data?.msg || "Failed to fetch transaction by reference",
+        error:"Failed to fetch transaction by reference",
         loading: false,
       });
+      throw err
     }
   },
 
@@ -138,10 +139,10 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
   }: PayWithLinkData) => {
     try {
       set({ loading: true, error: null, successMsg: null });
-      const res = await axios.post(`${HOST_URL}/transaction/pay/${paymentRef}`, {
-        fromEmail,
-        from,
-        amount,
+      const res = await axios.post(`${HOST_URL}/pay/${paymentRef}`, {
+        fromEmail, 
+        from, 
+        amount
       });
 
       set( ({
@@ -151,9 +152,10 @@ export const useTransactionStore = create<TransactionState>((set, get) => ({
     } catch (err: any) {
       console.error("Error paying with payment link:", err);
       set({
-        error: err.response?.data?.msg || "Payment failed",
+        error:  "Payment failed",
         loading: false,
       });
+      throw err
     }
   },
 

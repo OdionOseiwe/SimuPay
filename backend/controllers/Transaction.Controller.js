@@ -1,6 +1,7 @@
 import {Transaction} from '../models/Transaction.model.js'
 import { Wallet } from '../models/Wallet.model.js'
 import {Payment} from '../models/PaymentLink.model.js'
+import {User} from '../models/User.model.js'
 import { generateRefernce } from "../utils/generateRefernce.js";
 
 // this is called when a user makes a payment using a payment link
@@ -18,7 +19,7 @@ import { generateRefernce } from "../utils/generateRefernce.js";
 // Handle payment using a payment link
 export const payWithPaymentLink = async (req, res) => {
   try {
-    const { fromEmail, from, amount } = req.body;
+    const { fromEmail, from, amount} = req.body;
     const { paymentRef } = req.params;
 
     // Validate request
@@ -38,10 +39,18 @@ export const payWithPaymentLink = async (req, res) => {
 
     // Find receiver and sender wallets
     const receiverWallet = await Wallet.findById(payment.walletId);
+    const receiver = await User.findOne({_id:payment.creatorId});
     if (!receiverWallet) {
       return res.status(404).json({
         success: false,
         msg: 'No wallet found for this payment link',
+      });
+    }
+
+     if (!receiver) {
+      return res.status(404).json({
+        success: false,
+        msg: 'No Receiver found for this payment link',
       });
     }
 
@@ -71,30 +80,28 @@ export const payWithPaymentLink = async (req, res) => {
 
     // Create sender (debit) transaction
     const senderTransaction = new Transaction({
-      receiverWalletId: receiverWallet._id,
       fromEmail,
       from,
-      to: receiverWallet.userId,
-      receiverWalletId: payment.walletId,
+      to: receiver.BusinessName,
       amount,
       paymentName: payment.paymentName,
       paymentRef,
       transactionType: 'debit',
       reference,
+      createdAt: new Date()
     });
 
     // Create receiver (credit) transaction
     const receiverTransaction = new Transaction({
-      receiverWalletId: receiverWallet._id,
       fromEmail,
       from,
-      to: receiverWallet.userId,
-      receiverWalletId: payment.walletId,
+      to: receiver.BusinessName,
       amount,
       paymentName: payment.paymentName,
       paymentRef,
       transactionType: 'credit',
       reference,
+      createdAt: new Date()
     });
 
     // Update wallet balances
@@ -131,7 +138,7 @@ export const getTransactions = async (req, res) => {
     if (!txns.length) {
       return res.status(404).json({ success: false, msg: 'No transactions found' });
     }
-    res.status(200).json({ success: true, txns });
+    return res.status(200).json({ success: true, txns });
   } catch (error) {
     console.error('Error fetching transactions:', error);
     res.status(400).json({
@@ -145,8 +152,8 @@ export const getTransactions = async (req, res) => {
 // This fetches both sent (debit) and received (credit) transactions
 export const getTransactionByUserId = async (req, res) => {
   try {
-    const wallet = await Wallet.findOne({ userId: req.userId });
-    if (!wallet) {
+    const user = await User.findOne({ _id: req.userId });
+    if (!user) {
       return res.status(404).json({
         success: false,
         msg: 'No wallet found for this user',
@@ -154,21 +161,21 @@ export const getTransactionByUserId = async (req, res) => {
     }
     // Only debit transactions (money sent)
     const sent = await Transaction.find({
-      senderWalletId: wallet._id,
+      from: user.BusinessName,
       transactionType: "debit"
     });
 
     // Only credit transactions (money received)
     const received = await Transaction.find({
-      receiverWalletId: wallet._id,
+      to: user.BusinessName,
       transactionType: "credit"
     });
 
-    if (!sent.length && !received.length) { 
-      res.status(404).json({ success: false, msg: 'No transactions found' });
+    if (sent.length === 0 && received.length === 0) { 
+      return res.status(404).json({ success: false, msg: 'No transactions found' });
     }
 
-    res.status(200).json({ success: true, txns: [sent, received ] });
+    return res.status(200).json({ success: true, txns:{sent, received}});
   } catch (error) {
     console.error('Error fetching user transactions:', error);
     res.status(400).json({
@@ -181,7 +188,7 @@ export const getTransactionByUserId = async (req, res) => {
 // Get transactions by payment link reference
 export const getTransactionPaymentRef = async (req, res) => {
   try {
-    const { paymentRef } = req.query;
+    const { paymentRef } = req.params;
     if (!paymentRef) {
       return res.status(400).json({
         success: false,
@@ -195,7 +202,7 @@ export const getTransactionPaymentRef = async (req, res) => {
       return res.status(404).json({ success: false, msg: 'No transactions found' });
     }
 
-    res.status(200).json({ success: true, txns });
+    return res.status(200).json({ success: true, txns });
   } catch (error) {
     console.error('Error fetching transactions by payment link:', error);
     res.status(400).json({
@@ -208,18 +215,18 @@ export const getTransactionPaymentRef = async (req, res) => {
 
 // get transaction by reference, the reference is unique to every transaction both debit and credit
 export const getTransactionByReference = async(req, res) =>{
-  const {reference} = req.body;
+  const {reference} = req.params;
   if (!reference) {
-    res.status(400).json({
+    return res.status(400).json({
       success:false,
       msg: "field must be provided"
     })
   }
   try {
     const txn = await Transaction.findOne({reference});
-    res.status(200).json({
+    return res.status(200).json({
       success:true,
-      msg:txn
+      data:txn
     })
   } catch (error) {
     res.status(400).json({

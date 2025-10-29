@@ -1,11 +1,6 @@
 import mongoose from "mongoose";
 
 const TransactionSchema = new mongoose.Schema({
-    receiverWalletId:{
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: "Wallet",   // tells Mongoose this field references the Wallet model , users will pay to this walletid
-        required: true 
-    },
     fromEmail:String,
     from:String,
     to:String,

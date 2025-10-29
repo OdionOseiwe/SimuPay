@@ -13,11 +13,11 @@ function WalletPage() {
   })
 
   const [withdrawFormData, setWithdrawFormData] = useState({
-    accountNumber:0,
+    amount:0,
     bankName:'',
     accountName:'',
+    accountNumber:0,
     description:'',
-    amount:0
 
   })
 
@@ -38,17 +38,15 @@ function WalletPage() {
   const transfer = async(e:React.FormEvent) =>{
     e.preventDefault();
     try{
-      const res = await transferToWallet({...transferFormData});
-      setTransferFormData({
+      await transferToWallet({...transferFormData});
+      toast.success("Transfer successful",{ duration: 10000 });
+       setTransferFormData({
         userName:'',
         amount:0
       })
-      toast.success("Transfer succesful",{ duration: 10000 });
-      console.log("res transfer", res);
-      
     }catch(error:any){
       console.log("error Transfer", error);
-      toast.error(error.response.data.msg || "Error transfering funds")
+      toast.error(error?.response?.data?.msg || "Error transfering funds")
     }
   }
 
@@ -63,10 +61,10 @@ function WalletPage() {
         description:'',
         amount:0
       })
-      toast.success("withdrawal succesful",{ duration: 10000 });
+      toast.success("withdrawal successful",{ duration: 10000 });
     }catch(error:any){
       console.log("error Transfer", error);
-      toast.error(error.response.data.msg || "Error Withdrawing funds")
+      toast.error(error.response.data.msg || error.message  || "Error Withdrawing funds")
     }
   }
 

@@ -78,7 +78,7 @@ function PaymentLinkspage() {
                             </button>
                             </td>
                         <td className="px-4 py-2 max-w-3 truncate">{payment.paymentRef}</td>
-                        <td className="px-4 py-2 ">{payment.createdAt}</td>
+                        <td className="px-4 py-2 ">{new Date(payment.createdAt).toLocaleDateString('en-US')}</td>
                   
                     </tr>
                   ))}

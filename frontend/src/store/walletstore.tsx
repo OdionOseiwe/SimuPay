@@ -55,9 +55,10 @@ export const useWalletStore = create<WalletState>((set, get) => ({
     } catch (err: any) {
       console.error("Error fetching wallet balance:", err);
       set({
-        error: err.response?.data?.msg || "Failed to get balance",
+        error: "Failed to get balance",
         balanceLoading: false,
       });
+      throw err
     }
   },
 
@@ -76,8 +77,9 @@ export const useWalletStore = create<WalletState>((set, get) => ({
     } catch (err: any) {
       console.error("Error mocking money:", err);
       set({
-        error: err.response?.data?.msg || "Failed to add money",
+        error:  "Failed to add money",
       });
+      throw err
     }
   },
 
@@ -87,19 +89,23 @@ export const useWalletStore = create<WalletState>((set, get) => ({
       set({ transferLoading: true, error: null, successMsg: null });
       const res = await axios.post(
         `${HOST_URL}/wallet/transfer`,
-        { userName, amount }
+        {  amount, BusinessName:userName }
       );
+      console.log("res transfer to wallet", res);
+
       set({
         balance: res.data.balance,
         transferLoading: false,
         successMsg: "Transfer successful",
       });
+      
     } catch (err: any) {
       console.error("Error transferring money:", err);
       set({
-        error: err.response?.data?.msg || "Transfer failed",
+        error: "Transfer failed",
         transferLoading: false,
       });
+      throw err
     }
   },
 
@@ -131,9 +137,10 @@ export const useWalletStore = create<WalletState>((set, get) => ({
     } catch (err: any) {
       console.error("Error withdrawing money:", err);
       set({
-        error: err.response?.data?.msg || "Withdrawal failed",
+        error: "Withdrawal failed",
         withdrawalloading: false,
       });
+      throw err
     }
   }
 }));

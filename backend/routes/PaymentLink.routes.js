@@ -12,7 +12,7 @@ router.post('/payment-link', protect, createPaymentLink)
 //get all payment links created by a  loged in user
 router.get('/all-links', protect, getAllPaymentLinks)
 
-router.get('/payment-details', protect, getPaymentLinkByRef)
+router.get('/payment-details', getPaymentLinkByRef)
 
 //test route
 

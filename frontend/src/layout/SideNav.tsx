@@ -1,5 +1,5 @@
 import { ChevronDown, ChevronUp,User } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import UserProfile from "../Modals/User";
 import { useState } from 'react';
 import {useAuthStore,} from '../store/authstore'
@@ -22,10 +22,18 @@ function SideNav() {
               user && <UserProfile/>
             }
       <div className='py-8 text-gray-500 text-xl flex flex-col space-y-2'>
-        <Link to= {'/dashboard'}>Home</Link>
-        <Link to= {'/transactions'}>Transactions</Link>
-        <Link to ={'/links'}>Payment Links</Link>
-        <Link to= {'/wallet'}>Wallet</Link>
+        <NavLink 
+        className={({ isActive }) => isActive ? 'bg-gray-400 text-black p-2 ' : ''} 
+        to= {'/dashboard'}>Home</NavLink>
+        <NavLink 
+        className={({ isActive }) => isActive ? 'bg-gray-400 text-black p-2 ' : ''}  
+        to= {'/transactions'}>Transactions</NavLink>
+        <NavLink 
+        className={({ isActive }) => isActive ? 'bg-gray-400 text-black p-2 ' : ''}  
+        to ={'/links'}>Payment Links</NavLink>
+        <NavLink 
+        className={({ isActive }) => isActive ? 'bg-gray-400 text-black p-2 ' : ''}  
+        to= {'/wallet'}>Wallet</NavLink>
       </div>
     </div>
   )

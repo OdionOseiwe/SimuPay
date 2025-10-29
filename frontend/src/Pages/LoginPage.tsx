@@ -11,7 +11,7 @@ type formType ={
 }
 
 function LoginPage() {
-  const {login, isLoading} = useAuthStore();
+  const {login, isLoading, checkAuth} = useAuthStore();
   const navigate = useNavigate();
   const [eye, setEye] = useState<Boolean>(false)
   const [formData, setFormData] = useState<formType>({

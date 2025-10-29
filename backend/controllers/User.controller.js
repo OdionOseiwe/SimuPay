@@ -128,7 +128,10 @@ export const login = async(req,res)=>{
         generateTokenAndSetCookie(res, user._id);
 
         res.status(200).json({
-            success:true, msg:"sucessfully logedin"
+            success:true, user:{
+                ...user._doc,
+                password:undefined
+            }
         });
 
     } catch (error) {

@@ -1,19 +1,33 @@
 import Input from '../Components/Input'
 import {Mail, User,Coins} from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {useParams} from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { useTransactionStore } from '../store/transactionstore'
+import { usePaymentStore } from '../store/paymentstore'
 
 function PaymentPage() {
     const paymentReference = useParams()
+    
     const {payWithPaymentLink} = useTransactionStore();
+    const {getPaymentByRef, paymentDetails} = usePaymentStore()
     const [formData, setFormData] = useState({
         fromEmail:'',
         from:'',
         amount:0,
-        paymentRef: paymentReference
-    })
+        paymentRef: paymentReference.paymentRef
+    })    
+
+    useEffect(()=>{
+        getPaymentByRef(paymentReference.paymentRef)
+    }, [])
+
+    console.log(paymentDetails);
+
+    const handleChange = (e:React.ChangeEvent<HTMLInputElement>) =>{
+        const {name, value} = e.target;
+        setFormData(prev => ({...prev, [name]:value}))
+    }
 
     const handlePay = async(e:React.FormEvent) =>{
         e.preventDefault();
@@ -26,10 +40,6 @@ function PaymentPage() {
         }
     }
 
-    const handleChange = (e:React.ChangeEvent<HTMLInputElement>) =>{
-        const {name, value} = e.target;
-        setFormData(prev => ({...prev, [name]:value}))
-    }
   return (
     <div className='min-h-screen flex flex-col m-auto items-center bg-slate-900 p-10 '>
         <h1 className='text-gray-400 text-2xl font-semibold pb-6'>TechOdion Enterprice</h1>
@@ -37,7 +47,7 @@ function PaymentPage() {
         <div className=' w-2/6 bg-white p-8 rounded-2xl shadow-2xl ' >
         <form onSubmit={handlePay} action="">
 
-            <Input onChange={handleChange} Icon={User} type='text' name='fullname' placeholder='Full Name' value={formData.fullname} />
+            <Input onChange={handleChange} Icon={User} type='text' name='fullname' placeholder='Business Name' value={formData.fullname} />
             <Input onChange={handleChange} Icon={Mail} type='email' name='email' placeholder='Email' value={formData.email} />
             <Input onChange={handleChange} Icon={Coins} type='number' name='amount' placeholder='Amount' value={formData.amount} />
             <p className="text-xs text-gray-500 mt-1">

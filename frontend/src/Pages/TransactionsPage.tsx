@@ -2,22 +2,30 @@ import SideNav from '../layout/SideNav'
 import { Copy } from 'lucide-react';
 import {useState,useEffect} from 'react'
 import {useTransactionStore} from "../store/transactionstore"
+import { all } from 'axios';
 
 
 function TransactionsPage() {
-  const {transactions,getUserTransactions} = useTransactionStore();
+  const {transactions,getUserTransactions, getAllTransactions} = useTransactionStore();
 
-  console.log(transactions);
+  const sent = transactions?.sent || [];
+  const received = transactions?.received || [];
+
+  const allTransactions = [...sent, ...received];
+  
+  console.log(allTransactions);
+  
   
   useEffect(()=>{
     getUserTransactions()
+    // getAllTransactions()    
   }, [])
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const totalPages =  Math.ceil(transactions.length/itemsPerPage);
+  const totalPages =  Math.ceil(allTransactions.length/itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentItems = transactions.slice(startIndex, startIndex + itemsPerPage);
+  const currentItems = allTransactions.slice(startIndex, startIndex + itemsPerPage);
 
   const goToPage =(page:number) =>{
     if (page < 1 || page > totalPages) {
@@ -31,7 +39,7 @@ function TransactionsPage() {
      <SideNav/>
      <div className='flex flex-col px-8 py-5'>
         <h1 className='text-red-600 text-center text-2xl my-4'>Transactions</h1>
-        { transactions.length != 0 ?
+        { allTransactions.length != 0 ?
           <div>
             <table>
               <thead>
@@ -47,10 +55,10 @@ function TransactionsPage() {
                 <tbody>
                    {currentItems.map((currentItem)=>(
                      <tr className='hover:bg-gray-100'>
-                       <td className="px-4 py-2  border-b border-gray-200 ">{currentItem.createdAt}</td>
-                       <td className="px-4 py-2  border-b border-gray-200 ">{currentItem.amount}</td>
+                       <td className="px-4 py-2  border-b border-gray-200 ">{new Date(currentItem.createdAt).toLocaleDateString('en-US')}</td>
                        <td className="px-4 py-2  border-b border-gray-200 ">{currentItem.from}</td>
                        <td className="px-4 py-2  border-b border-gray-200 ">{currentItem.to}</td>
+                       <td className="px-4 py-2  border-b border-gray-200 ">{currentItem.amount}</td>
                        <td className="px-4 py-2  border-b border-gray-200 ">{currentItem.transactionType}</td>
                        <td className="px-4 py-2  border-b border-gray-200 "><span className='border-2 border-gray-600 shadow-lg cursor-pointer p-1 block'>{currentItem.reference}</span></td>
                      </tr>

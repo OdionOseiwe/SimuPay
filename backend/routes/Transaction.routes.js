@@ -8,7 +8,7 @@ router.post('/pay/:paymentRef', protect, payWithPaymentLink);
 // only logged in users can access these get routes
 
 //get all transactions 
-router.get('/transactions', protect, getTransactions);
+router.get('/transactions', getTransactions);
 
 //get transactions by user id -> loged in user
 router.get('/transactions/user', protect, getTransactionByUserId);
@@ -16,10 +16,10 @@ router.get('/transactions/user', protect, getTransactionByUserId);
 //get transactions by payment link
 // payment link is sent as query param
 // example /api/transaction/transactions?paymentRef=abc123
-router.get('/transactions/by-payment-link', protect, getTransactionPaymentRef);
+router.get('/transactions/by-payment-link', getTransactionPaymentRef);
 
 // example /api/transaction/transactions?reference=abc123
-router.get('/transactions/reference', protect, getTransactionByReference);
+router.get('/transactions/reference', getTransactionByReference);
 
 
 //test route

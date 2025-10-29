@@ -129,9 +129,9 @@ export const useAuthStore = create<AuthStore>((set) => ({
   logout: async () => {
     set({ isLoading: true, error: null });
     try {
-      await axios.post(`${HOST_URL}/user/logout`);
+      const response = await axios.post(`${HOST_URL}/user/logout`);
       set({
-        user: null,
+        user: response.data.user,
         isAuthenticated: false,
         isLoading: false,
       });

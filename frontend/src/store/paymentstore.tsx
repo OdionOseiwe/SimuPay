@@ -20,14 +20,17 @@ type paymentStore ={
     isGetingLinks: Boolean,
     isCreatingLinks:Boolean,
     links:PaymentType[],
+    paymentDetails:PaymentType | null,
     createPaymentLink: ( paymentName:string,minimumAmountForPayment:number,paymentDescription:string) => Promise<void>
     getAllPaymentLinks: () => Promise<void>
+    getPaymentByRef: (paymentRef:any) => Promise<void>
 }
 
 export const usePaymentStore = create<paymentStore>((set) => ({
     isGetingLinks: false,
     isCreatingLinks:false,
     links:[],
+    paymentDetails:null,
 
     // ✅ create payment link
     createPaymentLink: async(paymentName,  minimumAmountForPayment, paymentDescription) =>{
@@ -53,6 +56,17 @@ export const usePaymentStore = create<paymentStore>((set) => ({
             set({isGetingLinks:false, links:response.data.msg});
         } catch (error) {
             console.log("error getting links",error);
+            set({isGetingLinks:false})
+        }
+    },
+
+    getPaymentByRef: async(paymentRef) =>{
+        set({isGetingLinks:true});
+        try {
+            const response = await axios.get(`${HOST_URL}/payment-details`,{paymentRef})
+            set({isGetingLinks:false, paymentDetails:response.data.msg});
+        } catch (error) {
+            console.log("error getting payment details",error);
             set({isGetingLinks:false})
         }
     }

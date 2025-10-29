@@ -15,7 +15,7 @@ import { Loader } from 'lucide-react'
 
 
 const ProtectedRoutes = ({children}: { children: any })=>{
-  const {isAuthenticated, user} = useAuthStore();
+  const { isAuthenticated, user } = useAuthStore();
 
   if(!isAuthenticated){
     return <Navigate to= "/login" replace />;
@@ -24,31 +24,34 @@ const ProtectedRoutes = ({children}: { children: any })=>{
   if(!user?.isverified){
     return <Navigate to = '/verify-email' replace/>;
   }
-    
   return children
 }
 
 const RedirectAuthenticateduser =({children}:{children:any}) =>{
-  const {isAuthenticated, user, isCheckingAuth} = useAuthStore();
-
-  {isCheckingAuth && <Loader size={50} color='red' className='m-auto'/>}
+  const {isAuthenticated, user} = useAuthStore();
+  
+  console.log(user, isAuthenticated);
 
   if(isAuthenticated && user.isverified){
     return <Navigate to= "/dashboard" replace />;
   }
-
   return children
 }
 
-
 function App() {
-  const {checkAuth,isCheckingAuth} = useAuthStore();
+  const {checkAuth, isCheckingAuth} = useAuthStore();
 
   useEffect(()=>{
     checkAuth()
   },[checkAuth])
 
-  {isCheckingAuth && <Loader size={50} color='red' className='m-auto'/>}
+  if (isCheckingAuth) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader size={50} color="red" className="animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <>    
