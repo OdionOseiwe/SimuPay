@@ -9,5 +9,4 @@
     "moduleResolution": "node",
     "types": ["vite/client", "node"]
   },
-  "include": ["src"]
 }
