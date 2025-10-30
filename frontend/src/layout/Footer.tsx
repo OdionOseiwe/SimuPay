@@ -1,4 +1,3 @@
-import React from 'react'
 import {HandCoins,Linkedin, Github,Twitter} from 'lucide-react'
 
 function Footer() {

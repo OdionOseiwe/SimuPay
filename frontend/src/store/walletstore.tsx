@@ -36,7 +36,7 @@ interface WithdrawData {
   description: string;
 }
 
-export const useWalletStore = create<WalletState>((set, get) => ({
+export const useWalletStore = create<WalletState>((set) => ({
   balance: 0,
   transferLoading: false,
   withdrawalloading: false,  

@@ -38,10 +38,6 @@ app.use('/simupay/api/wallet',WalletRouter);
 // by using express.static middleware to serve the static files from the build folder
 if (process.env.NODE_ENV === "production" ) {
     app.use(express.static(path.join(__dirname, "frontend/build")));
-
-    app.get("*", (req,res)=>{
-        res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
-    })
 }
 
 app.listen(process.env.PORT, () => {

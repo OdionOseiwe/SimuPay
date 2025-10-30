@@ -1,6 +1,4 @@
-import React from 'react'
 import {Link, Power, CircleCheckBig} from 'lucide-react';
-
 
 function SimuTools() {
     const Tools=[
@@ -26,7 +24,7 @@ function SimuTools() {
       <p className='text-red-600 font-light mb-15'>Powerful business tools to give you and your business, lightning speed access to your money and payouts.</p>
       <div className='grid lg:grid-cols-3 gap-10 md:grid-cols-2 grid-cols-1'>
         {
-            Tools.map((tool, index)=>(
+            Tools.map((tool)=>(
                 <div className=''>
                     <tool.logo className='mx-auto' size={40}/>
                     <h2 className='text-2xl font-bold my-4'>{tool.heading}</h2>

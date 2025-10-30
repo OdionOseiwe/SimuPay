@@ -1,4 +1,3 @@
-import React from 'react'
 import { Globe, Wallet,WalletMinimal } from 'lucide-react';
 
 

@@ -47,8 +47,8 @@ function PaymentPage() {
         <div className=' w-2/6 bg-white p-8 rounded-2xl shadow-2xl ' >
         <form onSubmit={handlePay} action="">
 
-            <Input onChange={handleChange} Icon={User} type='text' name='from' placeholder='Business Name' value={formData.fullname} />
-            <Input onChange={handleChange} Icon={Mail} type='email' name='fromEmail' placeholder='Email' value={formData.email} />
+            <Input onChange={handleChange} Icon={User} type='text' name='from' placeholder='Business Name' value={formData.from} />
+            <Input onChange={handleChange} Icon={Mail} type='email' name='fromEmail' placeholder='Email' value={formData.fromEmail} />
             <Input onChange={handleChange} Icon={Coins} type='number' name='amount' placeholder='Amount' value={formData.amount} />
             <p className="text-xs text-gray-500 mt-1">
                 Amount should be above <span className="font-semibold"> {paymentDetails?.minimumAmountForPayment} Naira</span> 

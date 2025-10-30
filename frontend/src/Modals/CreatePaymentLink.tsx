@@ -103,7 +103,7 @@ function CreatePaymentLink({  setIsOpenCreateLinkModal }: typeProps) {
               className="outline-none border text-gray-600  border-gray-300  px-3 py-1 rounded-lg w-full "
               placeholder="decription"
               name="description"
-              rows="4"
+              rows={4} 
               maxLength={50}
               value={formData.description}
               onChange={(e) => handleChange(e)}

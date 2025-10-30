@@ -20,6 +20,8 @@ export interface Transaction {
   transactionType: "credit" | "debit";
   reference: string;
   createdAt: string;
+  sent:[],
+  received:[]
 }
 
 interface PayWithLinkData {
@@ -46,7 +48,7 @@ interface TransactionState {
 // -------------------------------
 // 💰 Zustand Store Implementation
 // -------------------------------
-export const useTransactionStore = create<TransactionState>((set, get) => ({
+export const useTransactionStore = create<TransactionState>((set) => ({
   transactions: [],
   loading: false,
   error: null,
