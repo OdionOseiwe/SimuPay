@@ -1,21 +1,27 @@
 import SideNav from '../layout/SideNav'
-import { Copy } from 'lucide-react';
+import { Copy, Loader, Menu } from 'lucide-react';
 import {useState, useEffect} from 'react'
 import {usePaymentStore} from "../store/paymentstore"
+import CreatePaymentLink from '../Modals/CreatePaymentLink'
 
 function PaymentLinkspage() {
-  const {getAllPaymentLinks,links} = usePaymentStore()
-
+  const {getAllPaymentLinks,links, isGetingLinks} = usePaymentStore()
+  const [isOpenCreateLinkModal, setIsOpenCreateLinkModal] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // for mobile toggle
     useEffect(()=>{
       getAllPaymentLinks()
     }, [])
+
+    const sortedLinks = links.sort((a,b)=> {
+      return new Date(b.createdAt).getDate() - new Date(a.createdAt).getDate()
+    })  
     
     const [copied, setCopied] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
-    const totalPages = Math.ceil(links.length / itemsPerPage);
+    const totalPages = Math.ceil(sortedLinks.length / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const currentItems = links.slice(startIndex, startIndex + itemsPerPage);
+    const currentItems = sortedLinks.slice(startIndex, startIndex + itemsPerPage);
 
     const handleCopy = (link:string) => {
       navigator.clipboard.writeText(link)
@@ -31,16 +37,39 @@ function PaymentLinkspage() {
     setCurrentPage(page);
   };
 
+    if(isGetingLinks){
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader size={50} color="red" className="animate-spin" />
+      </div>
+    )
+  }
 
   return (
     <div className='flex z-1 '>
-        <SideNav/>
+        <div className="md:hidden py-4 pl-2" 
+          onClick={() => setIsSidebarOpen(true)}>
+        <Menu size={30} color="red"  />
+      </div>
+      <SideNav
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+      />
+        {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-10 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
         <div className='p-8'>
             <div className='flex justify-between mb-8'>
                 <h1>Payment links</h1>
-                <button className="bg-red-600 text-white rounded-xs py-1 px-4">
+                <button  
+                onClick={() => setIsOpenCreateLinkModal(true)}  
+                className="bg-red-600 text-white rounded-xs py-1 px-4">
                     new payment Link
                 </button>
+               
             </div>
             {
               links.length != 0 ? 
@@ -116,12 +145,17 @@ function PaymentLinkspage() {
                 </button>
               </div>
             </div>  : 
-            <h1 className='text-3xl text-center'>
+            <h1 className='md:text-3xl text-xl text-center'>
               no payment links created yet
             </h1>
             }
             
         </div>
+          { isOpenCreateLinkModal && (
+            <div className="absolute inset-0 bg-black/40 flex items-center justify-center z-10">
+              <CreatePaymentLink isOpenCreateLinkModal={isOpenCreateLinkModal} setIsOpenCreateLinkModal={setIsOpenCreateLinkModal} />
+            </div>
+         )}
     </div>
   )
 }

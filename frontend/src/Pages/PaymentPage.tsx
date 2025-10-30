@@ -9,7 +9,7 @@ import { usePaymentStore } from '../store/paymentstore'
 function PaymentPage() {
     const paymentReference = useParams()
     
-    const {payWithPaymentLink} = useTransactionStore();
+    const {payWithPaymentLink,loading} = useTransactionStore();
     const {getPaymentByRef, paymentDetails} = usePaymentStore()
     const [formData, setFormData] = useState({
         fromEmail:'',
@@ -22,13 +22,13 @@ function PaymentPage() {
         getPaymentByRef(paymentReference.paymentRef)
     }, [])
 
-    console.log(paymentDetails);
-
     const handleChange = (e:React.ChangeEvent<HTMLInputElement>) =>{
         const {name, value} = e.target;
         setFormData(prev => ({...prev, [name]:value}))
     }
 
+    console.log(formData);
+    
     const handlePay = async(e:React.FormEvent) =>{
         e.preventDefault();
         try {
@@ -42,19 +42,19 @@ function PaymentPage() {
 
   return (
     <div className='min-h-screen flex flex-col m-auto items-center bg-slate-900 p-10 '>
-        <h1 className='text-gray-400 text-2xl font-semibold pb-6'>TechOdion Enterprice</h1>
-        <h3 className='text-gray-400 font-extralight text-lg pb-6'>Payment for acceptance fees</h3>
+        <h1 className='text-gray-400 text-2xl font-semibold pb-6'>{paymentDetails?.paymentName}</h1>
+        <h3 className='text-gray-400 font-extralight text-lg pb-6'>{paymentDetails?.paymentDescription}</h3>
         <div className=' w-2/6 bg-white p-8 rounded-2xl shadow-2xl ' >
         <form onSubmit={handlePay} action="">
 
-            <Input onChange={handleChange} Icon={User} type='text' name='fullname' placeholder='Business Name' value={formData.fullname} />
-            <Input onChange={handleChange} Icon={Mail} type='email' name='email' placeholder='Email' value={formData.email} />
+            <Input onChange={handleChange} Icon={User} type='text' name='from' placeholder='Business Name' value={formData.fullname} />
+            <Input onChange={handleChange} Icon={Mail} type='email' name='fromEmail' placeholder='Email' value={formData.email} />
             <Input onChange={handleChange} Icon={Coins} type='number' name='amount' placeholder='Amount' value={formData.amount} />
             <p className="text-xs text-gray-500 mt-1">
-                Amount should be above <span className="font-semibold"> 10000 Naira</span> 
+                Amount should be above <span className="font-semibold"> {paymentDetails?.minimumAmountForPayment} Naira</span> 
             </p>
-            <button type='submit' className="w-full md:text-xl mt-6 cursor-pointer bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1">
-                Pay now
+            <button disabled={loading} type='submit' className="w-full md:text-xl mt-6 cursor-pointer bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1">
+                {loading ? 'processing...' : 'Pay Now'}
             </button>
         </form>
         </div>

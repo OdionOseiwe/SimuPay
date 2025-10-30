@@ -63,7 +63,7 @@ export const usePaymentStore = create<paymentStore>((set) => ({
     getPaymentByRef: async(paymentRef) =>{
         set({isGetingLinks:true});
         try {
-            const response = await axios.get(`${HOST_URL}/payment-details`,{paymentRef})
+            const response = await axios.get(`${HOST_URL}/payment-details`, {params: { paymentRef}},)
             set({isGetingLinks:false, paymentDetails:response.data.msg});
         } catch (error) {
             console.log("error getting payment details",error);

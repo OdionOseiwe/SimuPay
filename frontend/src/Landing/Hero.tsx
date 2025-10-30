@@ -1,14 +1,26 @@
-import React from 'react'
+import {useState} from 'react'
 import NavBar from '../layout/NavBar'
 import {Link} from 'react-router-dom'
+import { Menu } from 'lucide-react'
 
 export default function Hero() {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // for mobile toggle
+
     const heroColor={
         backgroundColor: '#f2f1ed',
     }
   return (
-    <section id='Hero' className='min-h-screen'>
-      <NavBar/>
+    <section id='Hero' className='mb-20 z-10 relative'>
+        <div className="md:hidden py-4 pl-2" 
+          onClick={() => setIsSidebarOpen(true)}>
+        <Menu size={30} color="red"  />
+      </div>
+      <NavBar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+      { isSidebarOpen &&
+        <div
+          className='bg-black/40 z-10 fixed inset-0'>
+        </div>
+      }
         <div style={heroColor}  className='grid md:grid-cols-2 grid-cols-1 gap-5 items-center md:mx-20 mx-10 rounded-xl'>
             <div className='flex flex-col justify-center space-y-6 p-6'>
                 <h1 className='md:text-4xl text-2xl md:font-bold font-semibold'>Take your business global in 5 minutes</h1>

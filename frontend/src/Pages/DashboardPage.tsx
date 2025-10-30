@@ -1,11 +1,11 @@
 import { useState } from "react";
 import SideNav from "../layout/SideNav";
-import { CreditCard, ReceiptText, Receipt, Loader, User} from "lucide-react";
+import { CreditCard, ReceiptText, Receipt,Menu} from "lucide-react";
 import CreatePaymentLink from "../Modals/CreatePaymentLink";
-
 
 function DashboardPage() {
   const [isOpenCreateLinkModal, setIsOpenCreateLinkModal] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // for mobile toggle
 
   const payments = [
     {
@@ -32,9 +32,22 @@ function DashboardPage() {
   ];
 
   return (
-    <div className="flex z-1 relative">
-      <SideNav />
-      <div className="grid grid-cols-3 px-10 gap-4 items-center">
+    <div className="flex z-1 relative min-h-screen">
+      <div className="md:hidden py-4 pl-2" 
+          onClick={() => setIsSidebarOpen(true)}>
+        <Menu size={30} color="red"  />
+      </div>
+      <SideNav
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+      />
+        {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-10 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
+      <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1  px-4 md:px-5 py-10 md:py-0 gap-4 items-center">
         {payments.map((payment, index) => (
           <div
             key={index}

@@ -54,27 +54,12 @@ export const payWithPaymentLink = async (req, res) => {
       });
     }
 
-    const senderWallet = await Wallet.findOne({ userId: req.userId });
-    if (!senderWallet) {
-      return res.status(404).json({
-        success: false,
-        msg: 'No wallet found for sender',
-      });
-    }
 
     // Validate amount
     if (amount < payment.minimumAmountForPayment) {
       return res.status(400).json({
         success: false,
         msg: `Amount must be at least ${payment.minimumAmountForPayment}`,
-      });
-    }
-
-    // Check sender balance
-    if (senderWallet.balance < amount) {
-      return res.status(400).json({
-        success: false,
-        msg: "Insufficient balance in sender's wallet",
       });
     }
 
@@ -104,12 +89,9 @@ export const payWithPaymentLink = async (req, res) => {
       createdAt: new Date()
     });
 
-    // Update wallet balances
-    senderWallet.balance -= amount;
-    receiverWallet.balance += amount;
+    receiverWallet.balance = Number(receiverWallet.balance) + Number(amount);
 
     await Promise.all([
-      senderWallet.save(),
       receiverWallet.save(),
       payment.updateOne({ $inc: { totalAmount: amount } }),
       senderTransaction.save(),
@@ -188,7 +170,7 @@ export const getTransactionByUserId = async (req, res) => {
 // Get transactions by payment link reference
 export const getTransactionPaymentRef = async (req, res) => {
   try {
-    const { paymentRef } = req.params;
+    const { paymentRef } = req.query;
     if (!paymentRef) {
       return res.status(400).json({
         success: false,
@@ -215,7 +197,7 @@ export const getTransactionPaymentRef = async (req, res) => {
 
 // get transaction by reference, the reference is unique to every transaction both debit and credit
 export const getTransactionByReference = async(req, res) =>{
-  const {reference} = req.params;
+  const {reference} = req.query;
   if (!reference) {
     return res.status(400).json({
       success:false,

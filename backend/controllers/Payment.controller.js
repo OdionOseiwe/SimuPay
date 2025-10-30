@@ -60,7 +60,7 @@ export const getAllPaymentLinks = async(req, res)=>{
 }
 
 export const getPaymentLinkByRef = async(req, res) =>{
-    const {paymentRef} = req.body
+    const {paymentRef} = req.query
     try { 
         const payment = await Payment.findOne({paymentRef});
         

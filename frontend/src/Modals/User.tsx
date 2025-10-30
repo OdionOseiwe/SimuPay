@@ -17,9 +17,9 @@ export default function UserProfile() {
     }
   }
   return (
-      <div className="inset-0 absolute top-6 w-1/6 h-2/6 pt-4  m-8 text-gray-700  bg-white rounded-2xl shadow-2xl  
+      <div className="inset-0 absolute md:top-6 top-16 w-10/12 h-2/6 pt-4  m-8 text-gray-700  bg-white rounded-2xl shadow-2xl  
         transform transition-all duration-700 ease-in-out">
-        <h1 className=" text-center text-xl font-semibold">{user.BusinessName}</h1>
+        <h1 className="text-center text-xl font-semibold">{user.BusinessName}</h1>
         <h3 className="pb-4 text-center text-xs font-extralight">{user.email}</h3>
         <div className="font-light">
           <h3 className="border-t border-t-gray-300 pl-3 py-2 hover:bg-gray-200 transition-all duration-300 cursor-pointer">User Id: <span>123456</span></h3>

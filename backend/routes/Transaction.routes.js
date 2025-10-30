@@ -3,9 +3,8 @@ const router = express.Router()
 import { payWithPaymentLink,getTransactions, getTransactionByUserId, getTransactionPaymentRef ,getTransactionByReference} from "../controllers/Transaction.Controller.js"
 import { protect } from "../middlewares/protect.js"
 
-router.post('/pay/:paymentRef', protect, payWithPaymentLink);
-
-// only logged in users can access these get routes
+// its not protected so anyone can send dummmy money to payment link
+router.post('/pay/:paymentRef', payWithPaymentLink);
 
 //get all transactions 
 router.get('/transactions', getTransactions);

@@ -1,28 +1,29 @@
 import SideNav from '../layout/SideNav'
-import { Copy } from 'lucide-react';
+import { Menu, Loader } from 'lucide-react';
 import {useState,useEffect} from 'react'
 import {useTransactionStore} from "../store/transactionstore"
-import { all } from 'axios';
 
 
 function TransactionsPage() {
-  const {transactions,getUserTransactions, getAllTransactions} = useTransactionStore();
+  const {transactions,getUserTransactions, loading} = useTransactionStore();
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // for mobile toggle
 
   const sent = transactions?.sent || [];
   const received = transactions?.received || [];
 
-  const allTransactions = [...sent, ...received];
+  // Merge sent and received transactions and sort them by newest first
+  // numbers are sorted using this logic (a,b) => a - b
   
-  console.log(allTransactions);
-  
+  const allTransactions = [...sent, ...received].sort((a,b)=> {
+    return new Date(b.createdAt).getDate() - new Date(a.createdAt).getDate()
+  })  
   
   useEffect(()=>{
     getUserTransactions()
-    // getAllTransactions()    
   }, [])
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const itemsPerPage = 10;
   const totalPages =  Math.ceil(allTransactions.length/itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentItems = allTransactions.slice(startIndex, startIndex + itemsPerPage);
@@ -34,11 +35,41 @@ function TransactionsPage() {
     setCurrentPage(page)
   }
 
+  if(loading){
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loader size={50} color="red" className="animate-spin" />
+      </div>
+    )
+  }
+
   return (
     <div className='flex z-1'>
-     <SideNav/>
+       <div className="md:hidden py-4 pl-2" 
+          onClick={() => setIsSidebarOpen(true)}>
+        <Menu size={30} color="red"  />
+      </div>
+      <SideNav
+        isOpen={isSidebarOpen}
+        onClose={() => setIsSidebarOpen(false)}
+      />
+        {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/40 z-10 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
+
+      {
+          loading && (
+            <div className="flex justify-center items-center h-screen">
+              <Loader size={50} color="red" className="animate-spin" />
+            </div>
+          )     
+        }
      <div className='flex flex-col px-8 py-5'>
         <h1 className='text-red-600 text-center text-2xl my-4'>Transactions</h1>
+        
         { allTransactions.length != 0 ?
           <div>
             <table>
@@ -98,7 +129,7 @@ function TransactionsPage() {
               </button>
             </div>
           </div> : 
-          <div className='text-3xl text-center'>
+          <div className='md:text-3xl text-xl text-center'>
             No transactions yet
           </div>
         }

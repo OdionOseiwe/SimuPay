@@ -1,15 +1,21 @@
-import { ChevronDown, ChevronUp,User } from 'lucide-react';
+import { ChevronDown, ChevronUp,User, X } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import UserProfile from "../Modals/User";
 import { useState } from 'react';
 import {useAuthStore,} from '../store/authstore'
 
-function SideNav() {
+function SideNav({ isOpen, onClose }:{isOpen:boolean, onClose: () => void}) {
   const [user, openUser] = useState(false)
   const {user:userInfo} = useAuthStore();
   
   return (
-    <div className='bg-gray-200 p-4 w-50 min-h-screen'>
+    <div 
+      className={`bg-gray-200 p-4 w-64 min-h-screen fixed md:relative z-20 transition-transform transform
+      ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
+    >
+      <div className='flex justify-end p-2 md:hidden' onClick={onClose}>
+        <X/>
+      </div>
         <div className="flex items-center space-x-2 ">
             <p className="rounded-full bg-red-600 w-10 h-10 text-white flex justify-center items-center text-3xl font-light"><User/></p>
             <p className='font-light text-gray-600'>{userInfo.BusinessName}</p>
