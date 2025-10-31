@@ -1,17 +1,24 @@
-import express from "express"
-import cookieParser from 'cookie-parser';
-import {ConnectMongoDB} from './config/db.js'
-import userRouter from './routes/User.routes.js'
-import PaymentLinkRouter from './routes/PaymentLink.routes.js'
-import TransactionRouter from './routes/Transaction.routes.js'
-import WalletRouter from './routes/Wallet.routes.js'
-import path from 'path';
-import cors from 'cors'
+import express from "express";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import path, { dirname, join } from "path";
+import { fileURLToPath } from "url";
+
+import { ConnectMongoDB } from "./config/db.js";
+import userRouter from "./routes/User.routes.js";
+import PaymentLinkRouter from "./routes/PaymentLink.routes.js";
+import TransactionRouter from "./routes/Transaction.routes.js";
+import WalletRouter from "./routes/Wallet.routes.js";
+
+const app = express();
+
+// Fix __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 
-
-const app = express()
-const __dirname = path.resolve();
+// const app = express()
+// const __dirname = path.resolve();
 
 // cors configuration
 // formally the frontend is running on localhost:3000 and backend on localhost:5000
@@ -37,7 +44,24 @@ app.use('/simupay/api/wallet',WalletRouter);
 // but in production we can serve the built react frontend with the express server
 // by using express.static middleware to serve the static files from the build folder
 if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, "frontend/build")));
+  const frontendBuildPath = join(__dirname, "frontend", "build");
+
+  // Serve React static files
+  app.use(express.static(frontendBuildPath));
+
+  // Catch-all: send index.html for any unknown route
+  app.get("*", (req, res) => {
+    res.sendFile(join(frontendBuildPath, "index.html"));
+  });
+
+  // Optional: set CSP headers to allow Google Fonts
+  app.use((req, res, next) => {
+    res.setHeader(
+      "Content-Security-Policy",
+      "default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; img-src 'self' data:;"
+    );
+    next();
+  });
 }
 
 
