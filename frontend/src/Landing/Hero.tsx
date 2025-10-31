@@ -28,7 +28,7 @@ export default function Hero() {
                 <Link to={'/signup'} className='lg:w-6/12 md:w-8/12 text-center bg-red-600 rounded-lg py-2 text-white hover:scale-105 transition-all duration-300 hover:-translate-y-1'>Get Started</Link>
             </div>
             <div>
-                <img className='w-11/12 bg-transparent' src="https://uploads-ssl.webflow.com/62e3c55a5fb057c5b2954338/62e3cb14af27806aedf19fc7_Rectangle.gif" alt="image" />
+                <img className='w-11/12 bg-transparent' src="../../HeroPageImage.gif" alt="image" />
             </div>
         </div>
     </section>

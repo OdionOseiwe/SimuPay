@@ -35,7 +35,7 @@ function SimuTools() {
       </div>
       <div className='md:my-20 my-10 grid md:grid-cols-2 grid-cols-1 gap-5'>
         <div>
-            <img src="https://uploads-ssl.webflow.com/62e3c55a5fb057c5b2954338/62e44057b9a9376a10259e0f_image%201.svg" alt="" />
+            <img src= '../../SimuToolsImage.svg' alt="" />
         </div>
         <div className='flex flex-col justify-center space-y-6'>
             <h1 className='md:text-4xl text-2xl font-bold '>
