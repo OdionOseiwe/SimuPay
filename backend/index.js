@@ -46,15 +46,18 @@ app.use('/simupay/api/wallet',WalletRouter);
 if (process.env.NODE_ENV === "production") {
   const frontendBuildPath = join(__dirname, "frontend", "build");
 
-  // Serve React static files
+  // Serve static files
   app.use(express.static(frontendBuildPath));
 
-  // Catch-all: send index.html for any unknown route
-  app.get("/*", (req, res) => {
+  // Catch-all: send index.html for all non-API requests
+  app.use((req, res, next) => {
+    // If the request is for an API route, skip
+    if (req.path.startsWith("/simupay/api")) return next();
+
     res.sendFile(join(frontendBuildPath, "index.html"));
   });
 
-  // Optional: set CSP headers to allow Google Fonts
+  // Optional: CSP headers
   app.use((req, res, next) => {
     res.setHeader(
       "Content-Security-Policy",
@@ -63,6 +66,7 @@ if (process.env.NODE_ENV === "production") {
     next();
   });
 }
+
 
 
 app.listen(process.env.PORT, () => {
