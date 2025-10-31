@@ -50,7 +50,7 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static(frontendBuildPath));
 
   // Catch-all: send index.html for any unknown route
-  app.get("*", (req, res) => {
+  app.get("/*", (req, res) => {
     res.sendFile(join(frontendBuildPath, "index.html"));
   });
 
