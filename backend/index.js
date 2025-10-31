@@ -44,20 +44,19 @@ app.use('/simupay/api/wallet',WalletRouter);
 // but in production we can serve the built react frontend with the express server
 // by using express.static middleware to serve the static files from the build folder
 if (process.env.NODE_ENV === "production") {
-  const frontendBuildPath = join(__dirname, "frontend", "build");
+  // Vite build output folder
+  const frontendBuildPath = join(__dirname, "../frontend/dist");
 
   // Serve static files
   app.use(express.static(frontendBuildPath));
 
-  // Catch-all: send index.html for all non-API requests
+  // Catch-all: serve index.html for non-API requests
   app.use((req, res, next) => {
-    // If the request is for an API route, skip
     if (req.path.startsWith("/simupay/api")) return next();
-
     res.sendFile(join(frontendBuildPath, "index.html"));
   });
 
-  // Optional: CSP headers
+  // Optional: CSP headers to allow Google Fonts
   app.use((req, res, next) => {
     res.setHeader(
       "Content-Security-Policy",
