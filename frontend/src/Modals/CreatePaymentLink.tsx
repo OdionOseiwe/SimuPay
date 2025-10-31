@@ -51,18 +51,18 @@ function CreatePaymentLink({  setIsOpenCreateLinkModal }: typeProps) {
 
   
   return (
-    <div className="inset-0 fixed z-2 bg-white">
+    <div className="inset-0 fixed z-10 bg-white">
       <div className="flex p-4 justify-between border-b border-gray-300">
         <div className="flex space-x-3 items-center">
           <button className="cursor-pointer" onClick={() =>setIsOpenCreateLinkModal(false)}>
             <X />
           </button>
-          <p className="text-2xl">create payment link</p>
+          <p className="text-2xl md:relative hidden">create payment link</p>
         </div>
         <div className="flex space-x-3 text-l">
           <button
             onClick={() => setIsOpenCreateLinkModal(false)}
-            className="border-1 rounded-xs py-1 px-4 cursor-pointer"
+            className="border rounded-xs py-1 px-4 cursor-pointer"
           >
             cancel
           </button>
@@ -75,7 +75,7 @@ function CreatePaymentLink({  setIsOpenCreateLinkModal }: typeProps) {
         <form onSubmit={handleCreatePaymentLink} className="flex flex-col space-y-8" action="">
           <div className="">
             <input
-              className="text-gray-600 w-100 border border-gray-300  px-3 py-1 rounded-lg outline-none"
+              className="text-gray-600 md:w-100 w-75 border border-gray-300  px-3 py-1 rounded-lg outline-none"
               onChange={handleChange}
               placeholder="paymentname"
               type="text"
@@ -86,7 +86,7 @@ function CreatePaymentLink({  setIsOpenCreateLinkModal }: typeProps) {
           </div>
           <div>
             <input
-              className="text-gray-600 w-100 border border-gray-300  px-3 py-1 rounded-lg outline-none"
+              className="text-gray-600 md:w-100 w-75 border border-gray-300  px-3 py-1 rounded-lg outline-none"
               placeholder="minimum Amount"
               type="number"
               name="minAmount"
@@ -104,9 +104,9 @@ function CreatePaymentLink({  setIsOpenCreateLinkModal }: typeProps) {
               placeholder="decription"
               name="description"
               rows={4} 
-              maxLength={50}
+              maxLength={1250}
               value={formData.description}
-              onChange={(e) => handleChange(e)}
+              onChange={handleChange}             
               required
             ></textarea>
             <p className="text-xs text-gray-500 mt-1">Words typed: {wordCount}/50</p>  

@@ -43,7 +43,7 @@ function DashboardPage() {
       />
         {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-10 md:hidden"
+          className="fixed inset-0 bg-black/40 z-1 md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         ></div>
       )}
@@ -60,7 +60,7 @@ function DashboardPage() {
               onClick={() =>
                 payment.button === "create payment link" ? setIsOpenCreateLinkModal(true) : null
               }
-              className="cursor-pointer border-1 rounded-xs p-1 w-full"
+              className="cursor-pointer border rounded-xs p-1 w-full"
             >
               {payment.button}
             </button>

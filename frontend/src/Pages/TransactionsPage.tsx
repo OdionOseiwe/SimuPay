@@ -8,12 +8,16 @@ function TransactionsPage() {
   const {transactions,getUserTransactions, loading} = useTransactionStore();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // for mobile toggle
 
-  // If the store already returns a flat array of transactions, use it directly.
-  // Make a shallow copy before sorting to avoid mutating the original array.
-  const allTransactions = (transactions || []).slice().sort((a, b) => {
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
+  const sent = transactions?.sent || [];
+  const received = transactions?.received || [];
 
+  // Merge sent and received transactions and sort them by newest first
+  // numbers are sorted using this logic (a,b) => a - b
+  
+  const allTransactions = [...sent, ...received].sort((a,b)=> {
+    return new Date(b.createdAt).getDate() - new Date(a.createdAt).getDate()
+  })  
+  
   useEffect(()=>{
     getUserTransactions()
   }, [])
@@ -51,7 +55,7 @@ function TransactionsPage() {
       />
         {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-10 md:hidden"
+          className="fixed inset-0 bg-black/40 z-1 md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         ></div>
       )}

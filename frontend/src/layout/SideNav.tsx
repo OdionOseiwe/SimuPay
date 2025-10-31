@@ -10,7 +10,7 @@ function SideNav({ isOpen, onClose }:{isOpen:boolean, onClose: () => void}) {
   
   return (
     <div 
-      className={`bg-gray-200 p-4 w-64 min-h-screen fixed md:relative z-20 transition-transform transform
+      className={`bg-gray-200 p-4 w-64 min-h-screen fixed md:relative z-2 transition-transform transform
       ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0`}
     >
       <div className='flex justify-end p-2 md:hidden' onClick={onClose}>

@@ -44,7 +44,7 @@ function PaymentPage() {
     <div className='min-h-screen flex flex-col m-auto items-center bg-slate-900 p-10 '>
         <h1 className='text-gray-400 text-2xl font-semibold pb-6'>{paymentDetails?.paymentName}</h1>
         <h3 className='text-gray-400 font-extralight text-lg pb-6'>{paymentDetails?.paymentDescription}</h3>
-        <div className=' w-2/6 bg-white p-8 rounded-2xl shadow-2xl ' >
+        <div className=' bg-white md:p-8 p-4 rounded-2xl shadow-2xl ' >
         <form onSubmit={handlePay} action="">
 
             <Input onChange={handleChange} Icon={User} type='text' name='from' placeholder='Business Name' value={formData.from} />

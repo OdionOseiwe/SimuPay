@@ -82,7 +82,7 @@ function WalletPage() {
       />
         {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-10 md:hidden"
+          className="fixed inset-0 bg-black/40 z-1 md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         ></div>
       )}

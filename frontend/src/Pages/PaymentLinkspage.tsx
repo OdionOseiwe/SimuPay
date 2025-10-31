@@ -46,7 +46,7 @@ function PaymentLinkspage() {
   }
 
   return (
-    <div className='flex z-1 '>
+    <div className='flex z-1'>
         <div className="md:hidden py-4 pl-2" 
           onClick={() => setIsSidebarOpen(true)}>
         <Menu size={30} color="red"  />
@@ -57,7 +57,7 @@ function PaymentLinkspage() {
       />
         {isSidebarOpen && (
         <div
-          className="fixed inset-0 bg-black/40 z-10 md:hidden"
+          className="fixed inset-0 bg-black/40 z-1 md:hidden"
           onClick={() => setIsSidebarOpen(false)}
         ></div>
       )}
@@ -92,16 +92,16 @@ function PaymentLinkspage() {
                       <td className="px-4 py-2 max-w-50  truncate">{payment.paymentName}</td>
                       <td className="px-4 py-2 ">{payment.minimumAmountForPayment}</td>
                       <td 
-                        className="px-4 py-2  max-w-xs truncate" 
+                        className="px-4 py-2  max-w-50 truncate" 
                         title={payment.paymentDescription} // hover full decription shows
                       >
                         {payment.paymentDescription}
                       </td>
-                        <td className="px-4 py-2 ">
+                        <td className="  px-4 md:text-lg text-xs py-2 ">
                             <a className='border-2 border-gray-600 p-1' href={payment.paymentLink} >
                                 preview page
                             </a>
-                            <button className='text-xs px-1' onClick={()=>handleCopy(payment.paymentLink)}>
+                            <button className='md:inline-block hidden text-xs px-1' onClick={()=>handleCopy(payment.paymentLink)}>
                                 <Copy size={15}/>
                                 {copied ? "Copied!" : "Copy"}
                             </button>
