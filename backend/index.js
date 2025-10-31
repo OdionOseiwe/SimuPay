@@ -36,13 +36,15 @@ app.use('/simupay/api/wallet',WalletRouter);
 // normally the react frontend is built and served by a separate server
 // but in production we can serve the built react frontend with the express server
 // by using express.static middleware to serve the static files from the build folder
-if (process.env.NODE_ENV === "production" ) {
+if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, "frontend/build")));
 
-    app.get("/*", (req,res)=>{
-        res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
-    })
+    // catch-all route for React frontend
+    app.get('/:path(*)', (req, res) => {
+        res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"));
+    });
 }
+
 
 app.listen(process.env.PORT, () => {
     ConnectMongoDB();
