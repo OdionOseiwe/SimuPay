@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SimuPay</title>
 
-    <!-- Content Security Policy -->
+    <!-- CSP for Google Fonts -->
     <meta http-equiv="Content-Security-Policy" content="
       default-src 'self';
       style-src 'self' https://fonts.googleapis.com;
@@ -21,6 +21,7 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <!-- Vite will inject the built JS automatically -->
+    <script type="module" src="/assets/index-xxxx.js"></script>
   </body>
 </html>
