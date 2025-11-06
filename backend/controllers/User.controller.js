@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import crypto from 'crypto'
 import dotenv from 'dotenv'
 import {generateTokenAndSetCookie} from '../utils/generateAndSetToken.js'
-import {sendVerificationEmail, welcomeEmail} from '../mailTrap/mail.js'
+import {sendVerificationEmail, welcomeEmail} from '../Mail/mail.js'
 dotenv.config()
 
 //user signup
