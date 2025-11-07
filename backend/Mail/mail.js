@@ -9,7 +9,15 @@ export const sendVerificationEmail =  async(email, verificationCode) =>{
         subject: "Verifiation Email",
         html: verifyCodeTemplate.replace("{CODE}",verificationCode),
     };
-    transporter.sendMail(mailOptions)
+    await new Promise((resolve, reject) => {
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                reject(err);
+            } else {
+                resolve(info);
+            }
+        });
+    });
     } catch (error) {
         console.log("error while sending verification email",error);
     }   
